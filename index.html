@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="es">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Split 4 Días</title>
+<meta name="theme-color" content="#16130F">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Split 4D">
+<link rel="apple-touch-icon" href="data:image/png;base64,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">
+<link rel="icon" href="data:image/png;base64,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">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+
+  :root{
+    --ink:#16130F; --card:#221E18; --card2:#2B2620; --line:#39322A;
+    --bone:#F0EAE0; --dim:#9A9083;
+    --push:#D2543C; --pull:#4E9E8B; --legs:#D19A2B; --upper:#7C89C4; --notes:#8C8378;
+    --up:#6FB58C; --down:#B4634E;
+    --accent:var(--push);
+  }
+
+  html{background:var(--ink)}
+  body{background:var(--ink);color:var(--bone);font-family:'Barlow',system-ui,sans-serif;
+       font-size:16px;line-height:1.45;padding-bottom:64px}
+  .wrap{max-width:560px;margin:0 auto}
+  .top{padding-top:env(safe-area-inset-top)}
+  body{padding-bottom:calc(64px + env(safe-area-inset-bottom))}
+
+  .top{position:sticky;top:0;z-index:20;background:var(--ink);border-bottom:1px solid var(--line)}
+  .brand{display:flex;align-items:baseline;justify-content:space-between;padding:14px 16px 10px}
+  .brand b{font-family:'Anton',Impact,sans-serif;font-size:19px;letter-spacing:.06em;font-weight:400}
+  .brand span{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;
+              color:var(--dim);text-transform:uppercase}
+  .tabs{display:flex;overflow-x:auto;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:1 0 auto;min-width:74px;background:none;border:0;cursor:pointer;padding:9px 12px 11px;
+       font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.11em;text-transform:uppercase;
+       color:var(--dim);border-bottom:3px solid transparent;transition:color .15s}
+  .tab small{display:block;font-size:9px;opacity:.55;letter-spacing:.08em;margin-top:2px}
+  .tab[aria-selected="true"]{color:var(--bone);border-bottom-color:var(--c)}
+  .tab:focus-visible{outline:2px solid var(--bone);outline-offset:-3px}
+
+  .plate{padding:22px 16px 16px;border-bottom:1px solid var(--line)}
+  .eyebrow{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.18em;
+           text-transform:uppercase;color:var(--accent)}
+  .plate h1{font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:44px;line-height:.95;margin:6px 0 8px}
+  .plate p{color:var(--dim);font-size:14.5px}
+  .meter{display:flex;align-items:center;gap:10px;margin-top:14px}
+  .bar{flex:1;height:5px;background:var(--card2);border-radius:99px;overflow:hidden}
+  .bar i{display:block;height:100%;background:var(--accent);width:0;transition:width .3s ease}
+  .meter span{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--dim);
+              letter-spacing:.06em;white-space:nowrap}
+  .banner{margin:14px 16px 0;padding:11px 13px;background:var(--card);border-left:3px solid var(--accent);
+          font-size:13.5px;color:#CFC6B8;border-radius:0 6px 6px 0}
+
+  .card{border-bottom:1px solid var(--line);background:var(--ink)}
+  .card.done{background:#1B1814}
+  .head{display:flex;align-items:flex-start;gap:12px;width:100%;text-align:left;background:none;
+        border:0;color:inherit;cursor:pointer;padding:15px 16px;font-family:inherit}
+  .head:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+  .num{font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;color:var(--accent);
+       padding-top:3px;min-width:20px}
+  .done .num{color:var(--dim)}
+  .body{flex:1;min-width:0}
+  .name{font-size:17.5px;font-weight:600;letter-spacing:-.01em;line-height:1.2;display:block}
+  .done .name{color:var(--dim);text-decoration:line-through;text-decoration-thickness:1px}
+  .target{font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.09em;
+          text-transform:uppercase;color:var(--dim);margin-top:5px;display:block}
+  .pick{display:inline-flex;align-items:center;gap:6px;margin-top:9px;padding:5px 10px;
+        background:var(--card2);border-radius:5px;font-size:14px;font-weight:500;max-width:100%}
+  .pick b{color:var(--accent);font-family:'IBM Plex Mono',monospace;font-size:10px;
+          letter-spacing:.1em;font-weight:600}
+  .prev{margin-top:8px;font-size:12.5px;color:var(--dim);font-family:'IBM Plex Mono',monospace;display:block}
+  .tally{margin-top:7px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--bone);display:block}
+  .right{display:flex;flex-direction:column;align-items:flex-end;gap:9px;padding-top:2px}
+  .sets{font-family:'IBM Plex Mono',monospace;font-size:11px;font-weight:600;color:var(--bone);
+        background:var(--card2);padding:3px 7px;border-radius:4px;white-space:nowrap}
+  .tick{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--line);background:none;
+        cursor:pointer;display:grid;place-items:center;color:transparent;font-size:15px;transition:.15s}
+  .tick:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .done .tick{background:var(--accent);border-color:var(--accent);color:var(--ink)}
+  .chev{color:var(--dim);font-size:11px;font-family:'IBM Plex Mono',monospace;transition:transform .2s}
+  .open .chev{transform:rotate(180deg)}
+
+  .panel{padding:0 16px 18px 48px;display:none}
+  .open .panel{display:block}
+  .opthead{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.14em;
+           text-transform:uppercase;color:var(--dim);margin:0 0 9px}
+
+  .opt{display:flex;align-items:center;gap:11px;width:100%;text-align:left;font-family:inherit;
+       font-size:15.5px;color:#DCD4C7;background:var(--card);border:1px solid transparent;
+       border-radius:7px;padding:12px 13px;margin-bottom:7px;cursor:pointer;transition:.12s}
+  .opt:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  .opt .dot{width:15px;height:15px;border-radius:50%;flex:none;border:1.5px solid var(--line)}
+  .opt.on{border-color:var(--accent);background:var(--card2);color:var(--bone);font-weight:500}
+  .opt.on .dot{border-color:var(--accent);background:var(--accent);box-shadow:inset 0 0 0 3px var(--card2)}
+  .opt .flag{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:9px;
+             letter-spacing:.1em;color:var(--accent);text-transform:uppercase}
+  .opt .stale{margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:9px;
+              letter-spacing:.1em;color:var(--dim);text-transform:uppercase}
+
+  .log{margin-top:16px;border-top:1px solid var(--line);padding-top:15px}
+  .goal{display:flex;gap:9px;align-items:flex-start;padding:11px 12px;border-radius:7px;
+        background:var(--card);margin-bottom:13px}
+  .goal .k{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;
+           text-transform:uppercase;padding-top:3px;white-space:nowrap}
+  .goal.rise{background:rgba(111,181,140,.12)}
+  .goal.rise .k{color:var(--up)}
+  .goal.hold .k{color:var(--accent)}
+  .goal.none .k{color:var(--dim)}
+  .goal .v{font-size:14.5px;color:#D6CDBE;line-height:1.4}
+  .goal .v b{color:var(--bone);font-weight:600}
+
+  .row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+  .row .s{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--dim);
+          width:22px;flex:none;letter-spacing:.06em}
+  .fld{display:flex;align-items:center;background:var(--card);border:1px solid var(--line);
+       border-radius:6px;padding:0 9px;flex:1;min-width:0}
+  .fld:focus-within{border-color:var(--accent)}
+  .fld input{width:100%;min-width:0;background:none;border:0;color:var(--bone);
+             font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:600;
+             padding:10px 0;text-align:right}
+  .fld input:focus{outline:none}
+  .fld input::placeholder{color:#57503f;font-weight:400}
+  .fld u{font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--dim);
+         text-decoration:none;letter-spacing:.08em;padding-left:6px}
+  .row .x{color:var(--dim);font-size:13px;flex:none}
+  .delta{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.05em;
+         width:52px;flex:none;text-align:right}
+  .delta.u{color:var(--up)} .delta.d{color:var(--down)} .delta.e{color:var(--dim)}
+
+  .addset{background:none;border:1px dashed var(--line);color:var(--dim);border-radius:6px;
+          padding:8px;width:100%;cursor:pointer;font-family:'IBM Plex Mono',monospace;
+          font-size:10px;letter-spacing:.12em;text-transform:uppercase;margin-top:3px}
+  .hist{margin-top:13px}
+  .hist summary{font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.12em;
+                text-transform:uppercase;color:var(--dim);cursor:pointer;padding:4px 0}
+  .hist ul{list-style:none;margin-top:8px}
+  .hist li{display:flex;gap:10px;font-family:'IBM Plex Mono',monospace;font-size:12.5px;
+           color:#BEB4A4;padding:5px 0;border-top:1px solid var(--line)}
+  .hist li span{color:var(--dim);flex:none;width:56px}
+
+  .finish{padding:22px 16px 30px}
+  .finish button{width:100%;padding:15px;cursor:pointer;background:var(--accent);color:var(--ink);
+                 border:0;border-radius:8px;font-family:'Anton',Impact,sans-serif;
+                 font-size:16px;letter-spacing:.07em}
+  .finish button:disabled{background:var(--card2);color:var(--dim);cursor:default}
+  .finish p{margin-top:11px;font-size:12.5px;color:var(--dim);text-align:center;line-height:1.5}
+
+  .notes{padding:22px 16px 40px}
+  .notes h2{font-family:'Anton',Impact,sans-serif;font-weight:400;font-size:15px;letter-spacing:.09em;
+            text-transform:uppercase;margin:30px 0 12px}
+  .notes h2:first-child{margin-top:0}
+  .notes p{font-size:15px;color:#CBC2B4;margin-bottom:13px}
+  .notes p b{color:var(--bone);font-weight:600}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{padding:8px 6px;border-bottom:1px solid var(--line);text-align:left}
+  th{font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.11em;
+     text-transform:uppercase;color:var(--dim);font-weight:500}
+  td:nth-child(2),td:nth-child(3),th:nth-child(2),th:nth-child(3){text-align:right;
+     font-family:'IBM Plex Mono',monospace;font-size:13px}
+  td:nth-child(3){color:var(--dim)}
+  .reset{margin-top:26px;width:100%;padding:12px;cursor:pointer;background:none;
+         border:1px solid var(--line);border-radius:7px;color:var(--dim);
+         font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase}
+
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <div class="top">
+    <div class="brand"><b>SPLIT 4 DÍAS</b><span id="stamp">Lunes</span></div>
+    <nav class="tabs" id="tabs" role="tablist"></nav>
+  </div>
+  <main id="view"></main>
+</div>
+
+<script>
+const DAYS = {
+  push:{label:'Push',day:'Lunes',color:'var(--push)',title:'PUSH',sub:'Pecho · Hombro · Bíceps',
+    note:'Híbrido: el bíceps entra fresco porque ningún press lo toca.',ex:[
+    {n:'Press inclinado',t:'Pecho superior',s:3,o:['Mancuernas 30–45°','Máquina / Hammer','Smith inclinado','Barra inclinada']},
+    {n:'Press plano o fondos',t:'Pecho medio y bajo',s:2,o:['Mancuernas plano','Chest press máquina','Fondos con lastre','Barra plana','Smith declinado']},
+    {n:'Apertura',t:'Pecho en estiramiento',s:2,o:['Pec deck','Cruces a altura del pecho','Cruces alta a baja','Cruces baja a alta','Aperturas banco inclinado']},
+    {n:'Press vertical',t:'Deltoide anterior',s:2,o:['Mancuernas sentado','Militar con barra','Máquina de hombro','Smith','Arnold press']},
+    {n:'Elevación lateral',t:'Deltoide medio',s:3,o:['Polea unilateral','Mancuernas de pie','Máquina lateral','Lean-away colgado','Mancuernas sentado']},
+    {n:'Curl cabeza larga',t:'Brazo detrás del cuerpo',s:2,o:['Inclinado con mancuernas','Polea detrás del cuerpo','Inclinado unilateral en polea','Barra EZ, codos atrás']},
+    {n:'Curl cabeza corta',t:'Braquial y pico',s:2,o:['Predicador EZ','Predicador máquina','Martillo','Curl inverso EZ','Spider curl','Concentrado']}]},
+
+  pull:{label:'Pull',day:'Martes',color:'var(--pull)',title:'PULL',sub:'Espalda · Deltoide posterior · Tríceps',
+    note:'Híbrido: el tríceps entra fresco porque ningún remo ni jalón lo toca.',ex:[
+    {n:'Remo para dorsal',t:'Codo pegado al cuerpo',s:3,o:['Mancuerna a un brazo','Polea baja neutro estrecho','Máquina agarre neutro','Barra agarre supino','Meadows row']},
+    {n:'Remo espalda alta',t:'Codo abierto 45 a 90°',s:2,o:['Máquina pronado ancho','Chest-supported mancuernas','Polea sentado barra ancha','Remo en T ancho','Seal row']},
+    {n:'Jalón para dorsal',t:'Agarre cerrado o neutro',s:2,o:['Neutro estrecho','Dominadas supinas o neutras','Jalón unilateral','Pullover en polea']},
+    {n:'Jalón espalda alta',t:'Codos abiertos',s:2,o:['Pronado ancho al pecho','High row en máquina','Dominadas pronadas anchas','Jalón con codos abiertos']},
+    {n:'Deltoide posterior',t:'Cabeza posterior',s:3,o:['Reverse pec deck','Cruces invertidos en polea','Pájaros en banco inclinado','Face pull','Reverse fly unilateral']},
+    {n:'Extensión overhead',t:'Cabeza larga del tríceps',s:2,o:['Polea con cuerda overhead','Unilateral mancuerna sentado','Francés EZ acostado','Máquina overhead','Polea unilateral overhead']},
+    {n:'Push-down',t:'Cabeza lateral y medial',s:2,o:['Cuerda','Barra recta o V','Unilateral agarre inverso','Máquina de fondos','Press cerrado en Smith']}]},
+
+  legs:{label:'Piernas',day:'Miércoles',color:'var(--legs)',title:'PIERNAS',sub:'Tren inferior completo + abdomen',
+    note:'Único día de piernas de la semana. Si el tiempo aprieta, corta aductores primero y el segundo de abdomen después.',ex:[
+    {n:'Compuesto de cuádriceps',t:'Patrón de sentadilla',s:3,o:['Hack squat','Sentadilla libre','Prensa pies bajos','Pendulum o belt squat','Smith pies adelantados']},
+    {n:'Cuádriceps unilateral',t:'O aislamiento',s:3,o:['Extensión de cuádriceps','Sentadilla búlgara','Prensa unilateral','Zancadas caminando','Sissy squat']},
+    {n:'Isquios por cadera',t:'Trabajo en estiramiento',s:2,o:['RDL con barra','RDL con mancuernas','RDL unilateral','Buenos días','Extensión 45° con peso']},
+    {n:'Isquios por rodilla',t:'Flexión de rodilla',s:2,o:['Curl sentado','Curl tumbado','Curl unilateral de pie','Nórdicos']},
+    {n:'Glúteo',t:'Extensión de cadera',s:2,o:['Hip thrust','Abducción máquina inclinado','Prensa pies altos y anchos','Patada en polea','Step-up']},
+    {n:'Aductores',t:'Opcional · 1 a 2 series',s:1,o:['Máquina de aductores','Prensa stance sumo abierto','Copenhagen plank']},
+    {n:'Gemelos',t:'Alterna de pie y sentado',s:3,o:['De pie — gastrocnemio','Sentado — sóleo','En prensa','En Smith']},
+    {n:'Abdomen · tronco',t:'Flexión de columna',s:2,o:['Crunch en polea arrodillado','Crunch en máquina','Sit-up declinado con peso']},
+    {n:'Abdomen · pelvis',t:'Flexión inversa o anti-extensión',s:2,o:['Elevación de piernas colgado','Reverse crunch declinado','Rodillas en paralelas','Ab wheel']}]},
+
+  upper:{label:'Upper',day:'Jueves',color:'var(--upper)',title:'UPPER',sub:'Segunda pasada al tren superior',
+    note:'Regla del día: cada movimiento va con una variante distinta a la del lunes y el martes. Las repetidas aparecen marcadas.',ex:[
+    {n:'Press de pecho',t:'Ángulo distinto al lunes',s:2,o:['Chest press máquina','Fondos con lastre','Inclinado Hammer','Smith declinado','Barra plana','Mancuernas inclinado']},
+    {n:'Apertura',t:'Ángulo distinto al lunes',s:2,o:['Pec deck','Cruces alta a baja','Cruces baja a alta','Aperturas banco inclinado','Cruces a altura del pecho']},
+    {n:'Jalón',t:'Variante distinta al martes',s:2,o:['Neutro estrecho','Pronado ancho al pecho','Jalón unilateral','Pullover en polea','Dominadas']},
+    {n:'Remo',t:'Variante distinta al martes',s:2,o:['Mancuerna a un brazo','Polea baja neutro estrecho','Máquina pronado ancho','Chest-supported mancuernas','Remo en T ancho']},
+    {n:'Press vertical o frontal',t:'Opcional según el tiempo',s:2,o:['Máquina de hombro','Elevación frontal en polea','Mancuernas agarre neutro']},
+    {n:'Elevación lateral',t:'Deltoide medio',s:3,o:['Polea unilateral','Mancuernas de pie','Máquina lateral','Lean-away colgado','Mancuernas sentado']},
+    {n:'Deltoide posterior',t:'Cabeza posterior',s:3,o:['Reverse pec deck','Cruces invertidos en polea','Pájaros en banco inclinado','Face pull','Reverse fly unilateral']},
+    {n:'Tríceps',t:'Patrón contrario al del martes',s:2,o:['Polea con cuerda overhead','Push-down con cuerda','Push-down barra recta','Unilateral agarre inverso','Francés EZ acostado']},
+    {n:'Bíceps',t:'Un movimiento',s:2,o:['Predicador EZ','Martillo','Inclinado con mancuernas','Curl inverso EZ','Polea detrás del cuerpo']}]}
+};
+
+const KEY='split4dias:v2', TOP=10;
+let S={sel:{},done:{},last:{},log:{},hist:{}};
+let day='push', open=null, timer=null;
+
+/* Guarda donde se pueda: almacenamiento de Claude, si no el del navegador, si no en memoria. */
+const mem={};
+const STORE={
+  async get(){
+    if(window.storage){try{const r=await window.storage.get(KEY);if(r&&r.value)return r.value;}catch(e){}}
+    try{const v=localStorage.getItem(KEY);if(v)return v;}catch(e){}
+    return mem[KEY]||null;
+  },
+  async set(v){
+    mem[KEY]=v;
+    if(window.storage){try{await window.storage.set(KEY,v);return;}catch(e){}}
+    try{localStorage.setItem(KEY,v);}catch(e){}
+  }
+};
+
+async function load(){
+  try{const v=await STORE.get(); if(v) S=Object.assign(S,JSON.parse(v));}catch(e){}
+  ['sel','done','last','log','hist'].forEach(k=>{S[k]=S[k]||{}});
+  render();
+}
+function save(){
+  clearTimeout(timer);
+  timer=setTimeout(()=>{STORE.set(JSON.stringify(S));},350);
+}
+
+const g=(o,d,i)=>(S[o][d]&&S[o][d][i])||null;
+function set(o,d,i,v){(S[o][d]=S[o][d]||{})[i]=v;save();}
+function rows(d,i,n){S.log[d]=S.log[d]||{};if(!S.log[d][i])S.log[d][i]=Array.from({length:n},()=>({w:'',r:''}));return S.log[d][i];}
+const fmt=s=>s.filter(x=>x.w||x.r).map(x=>(x.w||'–')+'×'+(x.r||'–')).join('  ');
+const num=v=>{const n=parseFloat(String(v).replace(',','.'));return isNaN(n)?null:n;};
+function usedThisWeek(){const u=new Set();['push','pull'].forEach(d=>Object.values(S.sel[d]||{}).forEach(v=>u.add(v)));return u;}
+
+function goal(v){
+  const h=S.hist[v];
+  if(!h||!h.length) return {c:'none',k:'Sin registro',v:'Primera vez con esta variante. Anota peso y repeticiones para tener contra qué progresar.'};
+  const last=h[0].s.filter(x=>num(x.w)!==null&&num(x.r)!==null);
+  if(!last.length) return {c:'none',k:'Sin registro',v:'La última sesión quedó incompleta.'};
+  const w=Math.max.apply(null,last.map(x=>num(x.w)));
+  if(last.every(x=>num(x.r)>=TOP))
+    return {c:'rise',k:'Sube el peso',v:'Cerraste <b>'+TOP+' repeticiones en todas las series</b> con '+w+' kg. Sube al siguiente incremento y vuelve a 8.'};
+  return {c:'hold',k:'Mismo peso',v:'Última vez: <b>'+last.map(x=>x.w+'×'+x.r).join('  ')+'</b>. Mantén el peso y busca una repetición más en cada serie.'};
+}
+
+function delta(cur,prev){
+  const cw=num(cur.w),cr=num(cur.r);
+  if(cw===null||cr===null||!prev) return {c:'',x:''};
+  const pw=num(prev.w),pr=num(prev.r);
+  if(pw===null||pr===null) return {c:'',x:''};
+  if(cw>pw) return {c:'u',x:'+'+(+(cw-pw).toFixed(1))+' kg'};
+  if(cw<pw) return {c:'d',x:'-'+(+(pw-cw).toFixed(1))+' kg'};
+  if(cr>pr) return {c:'u',x:'+'+(cr-pr)+' rep'};
+  if(cr<pr) return {c:'d',x:'-'+(pr-cr)+' rep'};
+  return {c:'e',x:'='};
+}
+
+function renderTabs(){
+  document.getElementById('tabs').innerHTML=
+    Object.keys(DAYS).map(k=>{const d=DAYS[k];
+      return '<button class="tab" role="tab" aria-selected="'+(k===day)+'" style="--c:'+d.color+'" data-go="'+k+'">'+d.label+'<small>'+d.day.slice(0,3)+'</small></button>';}).join('')+
+    '<button class="tab" role="tab" aria-selected="'+(day==='notes')+'" style="--c:var(--notes)" data-go="notes">Notas<small>guía</small></button>';
+}
+
+function renderDay(){
+  const d=DAYS[day], used=day==='upper'?usedThisWeek():new Set();
+  const total=d.ex.length, doneN=d.ex.filter((_,i)=>g('done',day,i)).length;
+
+  const cards=d.ex.map((e,i)=>{
+    const sel=g('sel',day,i), prev=g('last',day,i), isDone=!!g('done',day,i), isOpen=open===i;
+    const L=rows(day,i,e.s), logged=fmt(L);
+    const h=sel?(S.hist[sel]||[]):[], G=sel?goal(sel):null, pset=h.length?h[0].s:null;
+
+    const logBlock = sel ? '<div class="log">'+
+      '<div class="goal '+G.c+'"><span class="k">'+G.k+'</span><span class="v">'+G.v+'</span></div>'+
+      L.map(function(r,k){const D=delta(r,pset&&pset[k]);
+        return '<div class="row">'+
+          '<span class="s">S'+(k+1)+'</span>'+
+          '<label class="fld"><input type="text" inputmode="decimal" placeholder="peso" value="'+r.w+'" data-log="'+i+'" data-set="'+k+'" data-f="w" aria-label="Peso serie '+(k+1)+'"><u>KG</u></label>'+
+          '<span class="x">×</span>'+
+          '<label class="fld"><input type="text" inputmode="numeric" placeholder="reps" value="'+r.r+'" data-log="'+i+'" data-set="'+k+'" data-f="r" aria-label="Repeticiones serie '+(k+1)+'"><u>REP</u></label>'+
+          '<span class="delta '+D.c+'" data-d="'+i+'-'+k+'">'+D.x+'</span></div>';}).join('')+
+      (L.length<5?'<button class="addset" data-add="'+i+'">+ serie extra</button>':'')+
+      (h.length?'<details class="hist"><summary>Historial · '+h.length+' sesiones</summary><ul>'+
+        h.slice(0,6).map(x=>'<li><span>'+x.d+'</span>'+(fmt(x.s)||'—')+'</li>').join('')+'</ul></details>':'')+
+      '</div>' : '';
+
+    return '<section class="card '+(isDone?'done':'')+' '+(isOpen?'open':'')+'">'+
+      '<button class="head" data-open="'+i+'" aria-expanded="'+isOpen+'">'+
+        '<span class="num">'+String(i+1).padStart(2,'0')+'</span>'+
+        '<span class="body">'+
+          '<span class="name">'+e.n+'</span>'+
+          '<span class="target">'+e.t+'</span>'+
+          (sel?'<span class="pick"><b>HOY</b>'+sel+'</span>':'')+
+          (!sel&&prev?'<span class="prev">última vez · '+prev+'</span>':'')+
+          (logged?'<span class="tally">'+logged+'</span>':'')+
+        '</span>'+
+        '<span class="right">'+
+          '<span class="sets">'+e.s+'×</span>'+
+          '<span class="tick" role="checkbox" aria-checked="'+isDone+'" aria-label="Marcar hecho" data-tick="'+i+'">✓</span>'+
+          '<span class="chev">▾</span>'+
+        '</span></button>'+
+      '<div class="panel"><div class="opthead">Elige la que esté libre</div>'+
+        e.o.map(o=>'<button class="opt '+(sel===o?'on':'')+'" data-pick="'+i+'" data-val="'+o+'"><span class="dot"></span>'+o+
+          (sel===o?'<span class="flag">elegida</span>':(used.has(o)?'<span class="stale">ya usada</span>':(prev===o?'<span class="stale">última vez</span>':'')))+
+        '</button>').join('')+
+        logBlock+
+      '</div></section>';
+  }).join('');
+
+  return '<div class="plate">'+
+      '<div class="eyebrow">'+d.day+' · '+total+' ejercicios</div>'+
+      '<h1>'+d.title+'</h1><p>'+d.sub+'</p>'+
+      '<div class="meter"><div class="bar"><i style="width:'+(doneN/total*100).toFixed(0)+'%"></i></div><span>'+doneN+' / '+total+'</span></div>'+
+    '</div><div class="banner">'+d.note+'</div>'+cards+
+    '<div class="finish"><button data-finish '+(doneN===0?'disabled':'')+'>Cerrar sesión de hoy</button>'+
+    '<p>Guarda pesos, repeticiones y variantes en el historial. La próxima vez te muestra qué tienes que superar.</p></div>';
+}
+
+function renderNotes(){
+  const rws=[['Pecho','10','2×'],['Espalda','12','2×'],['Deltoide anterior','4','2×'],['Deltoide medio','6','2×'],
+    ['Deltoide posterior','6','2×'],['Bíceps','6','2×'],['Tríceps','6','2×'],['Cuádriceps','6','1×'],
+    ['Isquios','4','1×'],['Glúteo y aductores','4','1×'],['Gemelos','3','1×'],['Abdomen','4','1×']]
+    .map(r=>'<tr><td>'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td></tr>').join('');
+  const n=Object.keys(S.hist).length;
+
+  return '<div class="notes">'+
+    '<h2>Cómo funciona la progresión</h2>'+
+    '<p>Doble progresión. Te quedas en el mismo peso hasta llegar a <b>10 repeticiones limpias en todas las series</b>, ahí subes el mínimo incremento disponible y vuelves a 8. La ficha lleva la cuenta: cuando cierras las series en 10, el ejercicio te aparece en verde con <b>Sube el peso</b>.</p>'+
+    '<p>El historial se guarda <b>por variante</b>, no por casilla. Hack squat y sentadilla libre son cargas distintas, así que cada una lleva su propia progresión y no se contaminan entre sí.'+(n?' Llevas '+n+' variantes registradas.':'')+'</p>'+
+    '<p>Para ejercicios con peso corporal, como dominadas o fondos, anota el <b>peso añadido</b>. Si vas a cuerpo libre deja 0 y progresa por repeticiones.</p>'+
+
+    '<h2>Por qué el híbrido</h2>'+
+    '<p>El bíceps entra fresco el lunes porque ningún press lo toca, y el tríceps entra fresco el martes porque ningún remo ni jalón lo toca. Con dos series al fallo no te sobra margen: si el tríceps llega pre-fatigado de tres movimientos de press, esas dos series valen bastante menos.</p>'+
+
+    '<h2>Por qué este orden</h2>'+
+    '<p>Piernas en miércoles parte la semana y le da un día de descanso al torso antes del Upper. Push va antes que Pull para que el pecho tenga dos días completos antes del jueves; la espalda tolera mejor la frecuencia y se banca el martes a jueves.</p>'+
+
+    '<h2>El punto débil</h2>'+
+    '<p>El tríceps queda martes y jueves, con un solo día entre medio. Si el jueves rinde mal, usa una variante de polea o máquina y déjalo como trabajo controlado en vez de una serie brutal al fallo.</p>'+
+
+    '<h2>Cuándo va la tercera serie</h2>'+
+    '<p>Compuestos que necesitan varias series para expresar la carga real, y músculos chicos que recuperan rápido: deltoide medio, deltoide posterior y gemelos. Si un ejercicio puntual te pide una serie extra, el botón está dentro de la ficha.</p>'+
+
+    '<h2>Fallo real y fallo con riesgo</h2>'+
+    '<p>En sentadilla libre, press con barra y RDL pesado quédate en RIR 0 a 1 con técnica intacta. El fallo verdadero guárdalo para máquinas, poleas y mancuernas, donde soltar el peso no te cuesta nada.</p>'+
+
+    '<h2>Cuatro días seguidos al fallo</h2>'+
+    '<p>Es agresivo. La creatina ayuda en el rendimiento dentro de la serie y algo en recuperación, pero no compensa la fatiga de sistema nervioso ni el daño local de entrenar al fallo cuatro días corridos. Dos ajustes: lleva la <b>primera</b> serie de los compuestos grandes a RIR 1 y solo la segunda al fallo, y mete una semana de descarga cada 6 a 8 semanas. Si el historial se te aplana en varios ejercicios a la vez, esa es la señal.</p>'+
+
+    '<h2>El costo de bajar a 4 días</h2>'+
+    '<p>Piernas a una vez por semana mantiene y progresa lento, no construye. Es un intercambio consciente con tu prioridad. Si quieres corregirlo sin volver a cinco días, pega un curl femoral y un hip thrust al final del Upper.</p>'+
+
+    '<h2>Volumen semanal</h2>'+
+    '<table><tr><th>Músculo</th><th>Series</th><th>Frec.</th></tr>'+rws+'</table>'+
+    '<button class="reset" data-reset>Borrar todo el historial</button></div>';
+}
+
+function render(){
+  renderTabs();
+  document.documentElement.style.setProperty('--accent',day==='notes'?'var(--notes)':DAYS[day].color);
+  document.getElementById('stamp').textContent=day==='notes'?'Guía del entrenador':DAYS[day].day;
+  document.getElementById('view').innerHTML=day==='notes'?renderNotes():renderDay();
+}
+
+/* escribir no redibuja la vista: solo refresca el indicador de esa fila */
+document.addEventListener('input',function(e){
+  const el=e.target.closest('[data-log]'); if(!el) return;
+  const i=+el.dataset.log, k=+el.dataset.set;
+  const L=rows(day,i,DAYS[day].ex[i].s);
+  L[k][el.dataset.f]=el.value.trim(); save();
+  const sel=g('sel',day,i), h=sel?(S.hist[sel]||[]):[];
+  const D=delta(L[k], h.length?h[0].s[k]:null);
+  const chip=document.querySelector('[data-d="'+i+'-'+k+'"]');
+  if(chip){chip.className='delta '+D.c;chip.textContent=D.x;}
+});
+
+document.addEventListener('click',function(e){
+  const go=e.target.closest('[data-go]');
+  if(go){day=go.dataset.go;open=null;scrollTo(0,0);return render();}
+
+  const tick=e.target.closest('[data-tick]');
+  if(tick){e.stopPropagation();const i=+tick.dataset.tick;set('done',day,i,!g('done',day,i));return render();}
+
+  const add=e.target.closest('[data-add]');
+  if(add){const i=+add.dataset.add;rows(day,i,DAYS[day].ex[i].s).push({w:'',r:''});save();return render();}
+
+  const pick=e.target.closest('[data-pick]');
+  if(pick){
+    const i=+pick.dataset.pick, v=pick.dataset.val, cur=g('sel',day,i);
+    set('sel',day,i,cur===v?null:v);
+    S.log[day]=S.log[day]||{}; delete S.log[day][i];
+    save(); return render();
+  }
+
+  const head=e.target.closest('[data-open]');
+  if(head){const i=+head.dataset.open;open=(open===i?null:i);return render();}
+
+  if(e.target.closest('[data-finish]')){
+    const stamp=new Date().toLocaleDateString('es-CL',{day:'2-digit',month:'short'});
+    DAYS[day].ex.forEach(function(_,i){
+      const v=g('sel',day,i), L=(S.log[day]||{})[i];
+      if(!v||!L) return;
+      const s=L.filter(x=>x.w!==''||x.r!=='');
+      if(!s.length) return;
+      S.hist[v]=[{d:stamp,s:s.map(x=>({w:x.w,r:x.r}))}].concat(S.hist[v]||[]).slice(0,12);
+    });
+    S.last[day]=Object.assign({},S.last[day],S.sel[day]);
+    S.sel[day]={};S.done[day]={};S.log[day]={};
+    save();open=null;scrollTo(0,0);return render();
+  }
+
+  if(e.target.closest('[data-reset]')){S={sel:{},done:{},last:{},log:{},hist:{}};save();return render();}
+});
+
+load();
+</script>
+
+</html>
