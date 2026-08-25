@@ -192,6 +192,63 @@
          border:1px solid var(--line);border-radius:7px;color:var(--dim);
          font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase}
 
+  /* --- Controles de modo: largo/corto e híbrido/normal --- */
+  .modes{display:flex;flex-wrap:wrap;gap:9px;padding:13px 16px 0}
+  .segwrap{flex:1;min-width:150px}
+  .seglab{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.14em;
+          text-transform:uppercase;color:var(--dim);margin-bottom:5px;display:block}
+  .seg{display:flex;background:var(--card);border:1px solid var(--line);border-radius:7px;padding:3px}
+  .seg button{flex:1;background:none;border:0;cursor:pointer;color:var(--dim);border-radius:5px;
+              font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;
+              text-transform:uppercase;padding:8px 4px;transition:.12s}
+  .seg button.on{background:var(--accent);color:var(--ink);font-weight:600}
+  .seg button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+
+  /* --- Selector de unidad kg/lb por variante --- */
+  .unitbar{display:flex;align-items:center;gap:8px;margin-bottom:11px}
+  .unitbar .ul{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.12em;
+               text-transform:uppercase;color:var(--dim)}
+  .useg{display:flex;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:2px}
+  .useg button{background:none;border:0;cursor:pointer;color:var(--dim);border-radius:4px;padding:5px 11px;
+               font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.1em;transition:.12s}
+  .useg button.on{background:var(--card2);color:var(--bone);font-weight:600;box-shadow:inset 0 0 0 1px var(--accent)}
+
+  /* --- Dropset --- */
+  .log .row{gap:6px}
+  .log .delta{width:42px}
+  .dsb{flex:none;width:30px;padding:9px 0;background:none;border:1px solid var(--line);border-radius:6px;
+       color:var(--dim);cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:9.5px;
+       letter-spacing:.02em;transition:.12s}
+  .dsb.on{border-color:var(--accent);color:var(--accent);background:var(--card2);font-weight:600}
+  .dsb:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  .droprow{display:flex;align-items:center;gap:8px;margin:-3px 0 9px 30px;padding-left:11px;
+           border-left:2px solid var(--line)}
+  .droprow .dl{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;
+               text-transform:uppercase;color:var(--accent);flex:none}
+  .droprow .fld{padding:0 8px}
+  .droprow .fld input{font-size:14.5px;padding:7px 0}
+  .dnote{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--dim);
+         letter-spacing:.05em;margin:-4px 0 9px 43px}
+
+  /* --- Stepper de series --- */
+  .stepper{display:flex;align-items:center;gap:9px;margin-top:5px}
+  .stepper button{flex:none;width:38px;padding:8px 0;background:none;border:1px dashed var(--line);
+                  border-radius:6px;color:var(--dim);cursor:pointer;
+                  font-family:'IBM Plex Mono',monospace;font-size:14px;line-height:1}
+  .stepper button:disabled{opacity:.3;cursor:default}
+  .stepper button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  .stepper span{flex:1;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:10px;
+                letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+
+  /* --- Convertidor kg/lb en Notas --- */
+  .conv{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:15px;margin-bottom:13px}
+  .convrow{display:flex;align-items:center;gap:10px}
+  .convrow .fld{background:var(--card2)}
+  .convrow .sw{color:var(--dim);font-size:16px;flex:none}
+  .convtab{margin-top:13px;font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--dim);
+           display:flex;flex-wrap:wrap;gap:5px 14px}
+  .convtab b{color:#BEB4A4;font-weight:500}
+
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 
@@ -205,49 +262,60 @@
 
 <script>
 const DAYS = {
-  push:{label:'Push',day:'Lunes',color:'var(--push)',title:'PUSH',sub:'Pecho · Hombro · Bíceps',
-    note:'Híbrido: el bíceps entra fresco porque ningún press lo toca.',ex:[
-    {n:'Press inclinado',t:'Pecho superior',s:3,o:['Press inclinado con mancuernas','Press inclinado en Hammer','Press inclinado en Smith','Press inclinado con barra']},
-    {n:'Press plano o fondos',t:'Pecho medio y bajo',s:2,o:['Press plano con mancuernas','Press plano en Smith','Chest press en máquina','Dips','Press banca con barra']},
-    {n:'Apertura',t:'Pecho en estiramiento',s:2,o:['Pec deck','Cruces en polea a la altura del pecho','Cruces en polea de alto a bajo','Cruces en polea de bajo a alto','Aperturas con mancuernas en inclinado']},
-    {n:'Press vertical',t:'Deltoide anterior',s:2,o:['Press militar con mancuernas','Press militar con barra','Press de hombro en máquina','Press militar en Smith','Arnold press']},
-    {n:'Elevación lateral',t:'Deltoide medio',s:3,o:['Elevación lateral en polea','Elevación lateral con mancuernas','Elevación lateral en máquina','Elevación lateral sentado']},
-    {n:'Curl cabeza larga',t:'Brazo detrás del cuerpo',s:2,o:['Curl inclinado con mancuernas','Curl en polea detrás del cuerpo','Curl con EZ codos atrás']},
-    {n:'Curl cabeza corta',t:'Braquial y pico',s:2,o:['Preacher curl con EZ','Preacher curl en máquina','Spider curl','Curl martillo','Curl inverso con EZ','Curl concentrado']}]},
+  push:{label:'Push',day:'Lunes',color:'var(--push)',title:'PUSH',
+    sub:{h:'Pecho · Hombro · Bíceps',n:'Pecho · Hombro · Tríceps'},
+    note:{h:'Híbrido: el bíceps entra fresco porque ningún press lo toca.',
+          n:'Reparto clásico: el tríceps cierra el día, ya pre-fatigado por los press. Compénsalo con máquinas o poleas.'},ex:[
+    {id:'p1',n:'Press inclinado',t:'Pecho superior',s:3,sh:1,o:['Press inclinado con mancuernas','Press inclinado en Hammer','Press inclinado en Smith','Press inclinado con barra']},
+    {id:'p2',n:'Press plano o fondos',t:'Pecho medio y bajo',s:2,o:['Press plano con mancuernas','Press plano en Smith','Chest press en máquina','Dips','Press banca con barra']},
+    {id:'p3',n:'Apertura',t:'Pecho en estiramiento',s:2,sh:1,o:['Pec deck','Cruces en polea a la altura del pecho','Cruces en polea de alto a bajo','Cruces en polea de bajo a alto','Aperturas con mancuernas en inclinado']},
+    {id:'p4',n:'Press vertical',t:'Deltoide anterior',s:2,sh:1,o:['Press militar con mancuernas','Press militar con barra','Press de hombro en máquina','Press militar en Smith','Arnold press']},
+    {id:'p5',n:'Elevación lateral',t:'Deltoide medio',s:3,sh:1,ss:2,o:['Elevación lateral en polea','Elevación lateral con mancuernas','Elevación lateral en máquina','Elevación lateral sentado']},
+    {id:'p6',n:'Curl cabeza larga',t:'Brazo detrás del cuerpo',s:2,sh:1,only:'h',o:['Curl inclinado con mancuernas','Curl en polea detrás del cuerpo','Curl con EZ codos atrás']},
+    {id:'p7',n:'Curl cabeza corta',t:'Braquial y pico',s:2,only:'h',o:['Preacher curl con EZ','Preacher curl en máquina','Spider curl','Curl martillo','Curl inverso con EZ','Curl concentrado']},
+    {id:'p8',n:'Extensión overhead',t:'Cabeza larga del tríceps',s:2,sh:1,only:'n',o:['Extensión overhead en polea con cuerda','Extensión overhead con mancuerna sentado','Press francés con EZ acostado','Extensión overhead en máquina','Extensión overhead unilateral en polea']},
+    {id:'p9',n:'Push-down',t:'Cabeza lateral y medial',s:2,only:'n',o:['Push-down con cuerda','Push-down con barra recta o V','Push-down unilateral agarre inverso','Fondos en máquina','Press cerrado en Smith']}]},
 
-  pull:{label:'Pull',day:'Martes',color:'var(--pull)',title:'PULL',sub:'Espalda · Deltoide posterior · Tríceps',
-    note:'Híbrido: el tríceps entra fresco porque ningún remo ni jalón lo toca.',ex:[
-    {n:'Remo para dorsal',t:'Codo pegado al cuerpo',s:3,o:['Remo con mancuerna a un brazo','Remo en polea baja agarre neutro','Remo en máquina agarre neutro','Remo con barra agarre supino','Meadows row']},
-    {n:'Remo espalda alta',t:'Codo abierto 45 a 90°',s:2,o:['Remo en máquina agarre pronado ancho','Remo con mancuernas apoyado en banco','Remo en polea sentado con barra ancha','Remo en T agarre ancho','Seal row']},
-    {n:'Jalón para dorsal',t:'Agarre cerrado o neutro',s:2,o:['Lat pulldown agarre neutro estrecho','Dominadas supinas o neutras','Lat pulldown unilateral','Pullover en polea']},
-    {n:'Jalón espalda alta',t:'Codos abiertos',s:2,o:['Lat pulldown agarre pronado ancho','High row en máquina','Dominadas pronadas anchas','Lat pulldown con codos abiertos']},
-    {n:'Deltoide posterior',t:'Cabeza posterior',s:3,o:['Reverse pec deck','Cruces invertidos en polea','Pájaros en banco inclinado','Face pull','Reverse fly unilateral en polea']},
-    {n:'Extensión overhead',t:'Cabeza larga del tríceps',s:2,o:['Extensión overhead en polea con cuerda','Extensión overhead con mancuerna sentado','Press francés con EZ acostado','Extensión overhead en máquina','Extensión overhead unilateral en polea']},
-    {n:'Push-down',t:'Cabeza lateral y medial',s:2,o:['Push-down con cuerda','Push-down con barra recta o V','Push-down unilateral agarre inverso','Fondos en máquina','Press cerrado en Smith']}]},
+  pull:{label:'Pull',day:'Martes',color:'var(--pull)',title:'PULL',
+    sub:{h:'Espalda · Deltoide posterior · Tríceps',n:'Espalda · Deltoide posterior · Bíceps'},
+    note:{h:'Híbrido: el tríceps entra fresco porque ningún remo ni jalón lo toca.',
+          n:'Reparto clásico: el bíceps cierra el día, ya cargado por remos y jalones. Dos series bien hechas bastan.'},ex:[
+    {id:'u1',n:'Remo para dorsal',t:'Codo pegado al cuerpo',s:3,sh:1,o:['Remo con mancuerna a un brazo','Remo en polea baja agarre neutro','Remo en máquina agarre neutro','Remo con barra agarre supino','Meadows row']},
+    {id:'u2',n:'Remo espalda alta',t:'Codo abierto 45 a 90°',s:2,sh:1,o:['Remo en máquina agarre pronado ancho','Remo con mancuernas apoyado en banco','Remo en polea sentado con barra ancha','Remo en T agarre ancho','Seal row']},
+    {id:'u3',n:'Jalón para dorsal',t:'Agarre cerrado o neutro',s:2,o:['Lat pulldown agarre neutro estrecho','Dominadas supinas o neutras','Lat pulldown unilateral','Pullover en polea']},
+    {id:'u4',n:'Jalón espalda alta',t:'Codos abiertos',s:2,o:['Lat pulldown agarre pronado ancho','High row en máquina','Dominadas pronadas anchas','Lat pulldown con codos abiertos']},
+    {id:'u10',n:'Jalón',t:'Elige dorsal o espalda alta',s:2,sh:1,co:1,o:['Lat pulldown agarre neutro estrecho','Dominadas supinas o neutras','Lat pulldown unilateral','Pullover en polea','Lat pulldown agarre pronado ancho','High row en máquina','Dominadas pronadas anchas','Lat pulldown con codos abiertos']},
+    {id:'u5',n:'Deltoide posterior',t:'Cabeza posterior',s:3,sh:1,ss:2,o:['Reverse pec deck','Cruces invertidos en polea','Pájaros en banco inclinado','Face pull','Reverse fly unilateral en polea']},
+    {id:'u6',n:'Extensión overhead',t:'Cabeza larga del tríceps',s:2,sh:1,only:'h',o:['Extensión overhead en polea con cuerda','Extensión overhead con mancuerna sentado','Press francés con EZ acostado','Extensión overhead en máquina','Extensión overhead unilateral en polea']},
+    {id:'u7',n:'Push-down',t:'Cabeza lateral y medial',s:2,only:'h',o:['Push-down con cuerda','Push-down con barra recta o V','Push-down unilateral agarre inverso','Fondos en máquina','Press cerrado en Smith']},
+    {id:'u8',n:'Curl cabeza larga',t:'Brazo detrás del cuerpo',s:2,sh:1,only:'n',o:['Curl inclinado con mancuernas','Curl en polea detrás del cuerpo','Curl con EZ codos atrás']},
+    {id:'u9',n:'Curl cabeza corta',t:'Braquial y pico',s:2,only:'n',o:['Preacher curl con EZ','Preacher curl en máquina','Spider curl','Curl martillo','Curl inverso con EZ','Curl concentrado']}]},
 
-  legs:{label:'Piernas',day:'Miércoles',color:'var(--legs)',title:'PIERNAS',sub:'Tren inferior completo + abdomen',
-    note:'Único día de piernas de la semana. Si el tiempo aprieta, corta aductores primero y el segundo de abdomen después.',ex:[
-    {n:'Compuesto de cuádriceps',t:'Patrón de sentadilla',s:3,o:['Hack squat','Sentadilla libre','Leg press pies bajos','Pendulum squat','Sentadilla en Smith pies adelantados']},
-    {n:'Cuádriceps unilateral',t:'O aislamiento',s:3,o:['Leg extension','Sentadilla búlgara','Leg press unilateral','Zancadas caminando','Sissy squat']},
-    {n:'Isquios por cadera',t:'Trabajo en estiramiento',s:2,o:['Peso muerto rumano con barra','Peso muerto rumano con mancuernas','Peso muerto rumano unilateral','Good morning','Hiperextensión 45° con peso']},
-    {n:'Isquios por rodilla',t:'Flexión de rodilla',s:2,o:['Curl femoral sentado','Curl femoral tumbado','Curl femoral unilateral de pie','Curl nórdico']},
-    {n:'Glúteo',t:'Extensión de cadera',s:2,o:['Hip thrust','Abducción en máquina','Leg press pies altos y anchos','Patada de glúteo en polea','Step-up']},
-    {n:'Aductores',t:'Opcional · 1 a 2 series',s:1,o:['Máquina de aductores','Leg press stance sumo','Copenhagen plank']},
-    {n:'Gemelos',t:'Alterna de pie y sentado',s:3,o:['Elevación de gemelos de pie','Elevación de gemelos sentado','Gemelos en leg press','Gemelos en Smith']},
-    {n:'Abdomen · tronco',t:'Flexión de columna',s:2,o:['Crunch en polea arrodillado','Crunch en máquina','Sit-up declinado con peso']},
-    {n:'Abdomen · pelvis',t:'Flexión inversa o anti-extensión',s:2,o:['Elevación de piernas colgado','Reverse crunch declinado','Elevación de rodillas en paralelas','Ab wheel']}]},
+  legs:{label:'Piernas',day:'Miércoles',color:'var(--legs)',title:'PIERNAS',
+    sub:{h:'Tu rutina de piernas + abdomen',n:'Tu rutina de piernas + abdomen'},
+    note:{h:'Simplificado a lo que haces de verdad. El deadlift está dentro de la bisagra de cadera para las veces que lo metes.',
+          n:'Simplificado a lo que haces de verdad. El deadlift está dentro de la bisagra de cadera para las veces que lo metes.'},ex:[
+    {id:'l1',n:'Compuesto de cuádriceps',t:'Leg press o hack',s:3,sh:1,o:['Leg press pies bajos','Hack squat','Sentadilla libre','Pendulum squat','Sentadilla en Smith pies adelantados','Leg extension']},
+    {id:'l2',n:'Curl femoral',t:'Isquios por flexión de rodilla',s:3,sh:1,ss:2,o:['Curl femoral sentado','Curl femoral tumbado','Curl femoral unilateral de pie','Curl nórdico']},
+    {id:'l3',n:'Bisagra de cadera',t:'Hiperextensión, rumano o deadlift',s:2,sh:1,o:['Hiperextensión 45° con peso','Peso muerto convencional','Peso muerto rumano con barra','Peso muerto rumano con mancuernas','Peso muerto rumano unilateral','Good morning']},
+    {id:'l4',n:'Aductores',t:'Cara interna del muslo',s:2,sh:1,o:['Máquina de aductores','Leg press stance sumo','Copenhagen plank']},
+    {id:'l5',n:'Gemelos',t:'Alterna de pie y sentado',s:3,ss:2,o:['Elevación de gemelos de pie','Elevación de gemelos sentado','Gemelos en leg press','Gemelos en Smith']},
+    {id:'l6',n:'Abdomen · tronco',t:'Flexión de columna',s:2,sh:1,o:['Crunch en polea arrodillado','Crunch en máquina','Sit-up declinado con peso']},
+    {id:'l7',n:'Abdomen · pelvis',t:'Flexión inversa o anti-extensión',s:2,o:['Elevación de piernas colgado','Reverse crunch declinado','Elevación de rodillas en paralelas','Ab wheel']}]},
 
-  upper:{label:'Upper',day:'Jueves',color:'var(--upper)',title:'UPPER',sub:'Segunda pasada al tren superior',
-    note:'Regla del día: cada movimiento va con una variante distinta a la del lunes y el martes. Las repetidas aparecen marcadas.',ex:[
-    {n:'Press de pecho',t:'Ángulo distinto al lunes',s:2,o:['Chest press en máquina','Dips','Press inclinado en Hammer','Press plano en Smith','Press banca con barra','Press inclinado con mancuernas']},
-    {n:'Apertura',t:'Ángulo distinto al lunes',s:2,o:['Pec deck','Cruces en polea de alto a bajo','Cruces en polea de bajo a alto','Aperturas con mancuernas en inclinado','Cruces en polea a la altura del pecho']},
-    {n:'Jalón',t:'Variante distinta al martes',s:2,o:['Lat pulldown agarre neutro estrecho','Lat pulldown agarre pronado ancho','Lat pulldown unilateral','Pullover en polea','Dominadas supinas o neutras']},
-    {n:'Remo',t:'Variante distinta al martes',s:2,o:['Remo con mancuerna a un brazo','Remo en polea baja agarre neutro','Remo en máquina agarre pronado ancho','Remo con mancuernas apoyado en banco','Remo en T agarre ancho']},
-    {n:'Press vertical o frontal',t:'Opcional según el tiempo',s:2,o:['Press de hombro en máquina','Elevación frontal en polea','Press militar con mancuernas']},
-    {n:'Elevación lateral',t:'Deltoide medio',s:3,o:['Elevación lateral en polea','Elevación lateral con mancuernas','Elevación lateral en máquina','Elevación lateral sentado']},
-    {n:'Deltoide posterior',t:'Cabeza posterior',s:3,o:['Reverse pec deck','Cruces invertidos en polea','Pájaros en banco inclinado','Face pull','Reverse fly unilateral en polea']},
-    {n:'Tríceps',t:'Patrón contrario al del martes',s:2,o:['Extensión overhead en polea con cuerda','Push-down con cuerda','Push-down con barra recta o V','Push-down unilateral agarre inverso','Press francés con EZ acostado']},
-    {n:'Bíceps',t:'Un movimiento',s:2,o:['Preacher curl con EZ','Curl martillo','Curl inclinado con mancuernas','Curl inverso con EZ','Curl en polea detrás del cuerpo']}]}
+  upper:{label:'Upper',day:'Jueves',color:'var(--upper)',title:'UPPER',
+    sub:{h:'Segunda pasada al tren superior',n:'Segunda pasada al tren superior'},
+    note:{h:'Regla del día: cada movimiento va con una variante distinta a la del lunes y el martes. Las repetidas aparecen marcadas.',
+          n:'Regla del día: cada movimiento va con una variante distinta a la del lunes y el martes. Las repetidas aparecen marcadas.'},ex:[
+    {id:'x1',n:'Press de pecho',t:'Prioriza inclinado sobre plano',s:2,sh:1,o:['Press inclinado en Hammer','Press inclinado con mancuernas','Press inclinado en Smith','Chest press en máquina','Dips','Press banca con barra']},
+    {id:'x2',n:'Apertura',t:'Ángulo distinto al lunes',s:2,o:['Pec deck','Cruces en polea de alto a bajo','Cruces en polea de bajo a alto','Aperturas con mancuernas en inclinado','Cruces en polea a la altura del pecho']},
+    {id:'x3',n:'Jalón',t:'Variante distinta al martes',s:2,sh:1,o:['Lat pulldown agarre neutro estrecho','Lat pulldown agarre pronado ancho','Lat pulldown unilateral','Pullover en polea','Dominadas supinas o neutras']},
+    {id:'x4',n:'Remo',t:'Variante distinta al martes',s:2,sh:1,o:['Remo con mancuerna a un brazo','Remo en polea baja agarre neutro','Remo en máquina agarre pronado ancho','Remo con mancuernas apoyado en banco','Remo en T agarre ancho']},
+    {id:'x5',n:'Press vertical o frontal',t:'Opcional según el tiempo',s:2,o:['Press de hombro en máquina','Elevación frontal en polea','Press militar con mancuernas']},
+    {id:'x6',n:'Elevación lateral',t:'Deltoide medio',s:3,sh:1,ss:2,o:['Elevación lateral en polea','Elevación lateral con mancuernas','Elevación lateral en máquina','Elevación lateral sentado']},
+    {id:'x7',n:'Deltoide posterior',t:'Cabeza posterior',s:3,o:['Reverse pec deck','Cruces invertidos en polea','Pájaros en banco inclinado','Face pull','Reverse fly unilateral en polea']},
+    {id:'x8',n:'Tríceps',t:'Patrón contrario al del martes',s:2,sh:1,ss:2,o:['Extensión overhead en polea con cuerda','Push-down con cuerda','Push-down con barra recta o V','Push-down unilateral agarre inverso','Press francés con EZ acostado']},
+    {id:'x9',n:'Bíceps',t:'Un movimiento',s:2,sh:1,ss:2,o:['Preacher curl con EZ','Curl martillo','Curl inclinado con mancuernas','Curl inverso con EZ','Curl en polea detrás del cuerpo']}]}
 };
 
 const INFO={
@@ -377,12 +445,32 @@ const INFO={
  'Elevación de rodillas en paralelas':{i:'https://wger.de/media/exercise-images/125/Leg-raises-2.png',d:'Apoyado en los antebrazos en el caballete, subes las rodillas al pecho. Versión más accesible que la colgada.'},
  'Ab wheel':{i:'',d:'Con la rueda, ruedas hacia adelante resistiendo la extensión y vuelves. Anti-extensión puro: el abdomen trabaja evitando que la espalda se arquee.'},
 
- 'Elevación frontal en polea':{i:'',d:'Polea baja por delante, subes el brazo recto hasta la altura de los ojos. Deltoide anterior aislado, útil cuando ya no queda para otro press.'}
+ 'Elevación frontal en polea':{i:'',d:'Polea baja por delante, subes el brazo recto hasta la altura de los ojos. Deltoide anterior aislado, útil cuando ya no queda para otro press.'},
+
+ 'Peso muerto convencional':{i:'https://wger.de/media/exercise-images/161/Dead-lifts-2.png',d:'Levantas la barra desde el suelo con la espalda neutra hasta quedar de pie. Trabaja toda la cadena posterior: isquios, glúteo y espalda baja. Es el más fatigante de la app: quédate en RIR 1 o 2 y no lo lleves al fallo.'}
 };
 
-const KEY='split4dias:v2', TOP=10;
-let S={sel:{},done:{},last:{},log:{},hist:{}};
+const KEY='split4dias:v2', TOP=10, LB=2.20462;
+let S={sel:{},done:{},last:{},log:{},hist:{},mode:{},split:'h',unit:{}};
 let day='push', open=null, timer=null, guide=null;
+
+/* modo del día: 'largo' (todo) o 'corto' (solo lo marcado con sh) */
+const modeOf=k=>(S.mode&&S.mode[k])||'largo';
+/* reparto: 'h' híbrido (brazo cruzado) o 'n' normal (push=tríceps, pull=bíceps) */
+const splitOf=()=>S.split||'h';
+/* unidad de peso, guardada por variante porque el gym mezcla notaciones */
+const unitOf=v=>(S.unit&&S.unit[v])||'kg';
+
+/* ejercicios visibles hoy: filtra por reparto y por modo corto */
+function exList(k){
+  const sp=splitOf(), md=modeOf(k);
+  /* co: solo aparece en corto (versiones fusionadas de dos secciones) */
+  return DAYS[k].ex.filter(e=>(!e.only||e.only===sp)&&(md==='largo'?!e.co:!!e.sh));
+}
+/* series objetivo: en corto usa ss si el ejercicio lo define */
+const setsOf=(e,k)=>(modeOf(k)==='corto'&&e.ss)?e.ss:e.s;
+/* textos que cambian según el reparto */
+const txt=(v)=>(typeof v==='string')?v:(v[splitOf()]||v.h);
 
 /* Guarda donde se pueda: almacenamiento de Claude, si no el del navegador, si no en memoria. */
 const mem={};
@@ -401,7 +489,8 @@ const STORE={
 
 async function load(){
   try{const v=await STORE.get(); if(v) S=Object.assign(S,JSON.parse(v));}catch(e){}
-  ['sel','done','last','log','hist'].forEach(k=>{S[k]=S[k]||{}});
+  ['sel','done','last','log','hist','mode','unit'].forEach(k=>{S[k]=S[k]||{}});
+  if(S.split!=='h'&&S.split!=='n') S.split='h';
   render();
 }
 function save(){
@@ -412,28 +501,31 @@ function save(){
 const g=(o,d,i)=>(S[o][d]&&S[o][d][i])||null;
 function set(o,d,i,v){(S[o][d]=S[o][d]||{})[i]=v;save();}
 function rows(d,i,n){S.log[d]=S.log[d]||{};if(!S.log[d][i])S.log[d][i]=Array.from({length:n},()=>({w:'',r:''}));return S.log[d][i];}
-const fmt=s=>s.filter(x=>x.w||x.r).map(x=>(x.w||'–')+'×'+(x.r||'–')).join('  ');
+const fmt=s=>s.filter(x=>x.w||x.r).map(x=>(x.w||'–')+'×'+(x.r||'–')+(x.ds?'▼':'')).join('  ');
 const num=v=>{const n=parseFloat(String(v).replace(',','.'));return isNaN(n)?null:n;};
 function usedThisWeek(){const u=new Set();['push','pull'].forEach(d=>Object.values(S.sel[d]||{}).forEach(v=>u.add(v)));return u;}
 
 function goal(v){
-  const h=S.hist[v];
+  const h=S.hist[v], U=unitOf(v);
   if(!h||!h.length) return {c:'none',k:'Sin registro',v:'Primera vez con esta variante. Anota peso y repeticiones para tener contra qué progresar.'};
   const last=h[0].s.filter(x=>num(x.w)!==null&&num(x.r)!==null);
   if(!last.length) return {c:'none',k:'Sin registro',v:'La última sesión quedó incompleta.'};
+  const hu=h[0].u||'kg';
+  if(hu!==U) return {c:'none',k:'Cambió la unidad',v:'La última vez lo anotaste en <b>'+hu+'</b> y ahora estás en <b>'+U+'</b>. Anota esta sesión y desde la próxima vuelve a compararte.'};
   const w=Math.max.apply(null,last.map(x=>num(x.w)));
   if(last.every(x=>num(x.r)>=TOP))
-    return {c:'rise',k:'Sube el peso',v:'Cerraste <b>'+TOP+' repeticiones en todas las series</b> con '+w+' kg. Sube al siguiente incremento y vuelve a 8.'};
+    return {c:'rise',k:'Sube el peso',v:'Cerraste <b>'+TOP+' repeticiones en todas las series</b> con '+w+' '+U+'. Sube al siguiente incremento y vuelve a 8.'};
   return {c:'hold',k:'Mismo peso',v:'Última vez: <b>'+last.map(x=>x.w+'×'+x.r).join('  ')+'</b>. Mantén el peso y busca una repetición más en cada serie.'};
 }
 
-function delta(cur,prev){
+function delta(cur,prev,u){
   const cw=num(cur.w),cr=num(cur.r);
   if(cw===null||cr===null||!prev) return {c:'',x:''};
   const pw=num(prev.w),pr=num(prev.r);
   if(pw===null||pr===null) return {c:'',x:''};
-  if(cw>pw) return {c:'u',x:'+'+(+(cw-pw).toFixed(1))+' kg'};
-  if(cw<pw) return {c:'d',x:'-'+(+(pw-cw).toFixed(1))+' kg'};
+  const U=u||'kg';
+  if(cw>pw) return {c:'u',x:'+'+(+(cw-pw).toFixed(1))+' '+U};
+  if(cw<pw) return {c:'d',x:'-'+(+(pw-cw).toFixed(1))+' '+U};
   if(cr>pr) return {c:'u',x:'+'+(cr-pr)+' rep'};
   if(cr<pr) return {c:'d',x:'-'+(pr-cr)+' rep'};
   return {c:'e',x:'='};
@@ -448,29 +540,46 @@ function renderTabs(){
 
 function renderDay(){
   const d=DAYS[day], used=day==='upper'?usedThisWeek():new Set();
-  const total=d.ex.length, doneN=d.ex.filter((_,i)=>g('done',day,i)).length;
+  const list=exList(day), md=modeOf(day), sp=splitOf();
+  const total=list.length, doneN=list.filter(e=>g('done',day,e.id)).length;
 
-  const cards=d.ex.map((e,i)=>{
-    const sel=g('sel',day,i), prev=g('last',day,i), isDone=!!g('done',day,i), isOpen=open===i;
-    const L=rows(day,i,e.s), logged=fmt(L);
+  const cards=list.map((e,i)=>{
+    const id=e.id, nS=setsOf(e,day);
+    const sel=g('sel',day,id), prev=g('last',day,id), isDone=!!g('done',day,id), isOpen=open===id;
+    const L=rows(day,id,nS), logged=fmt(L);
     const h=sel?(S.hist[sel]||[]):[], G=sel?goal(sel):null, pset=h.length?h[0].s:null;
+    const U=sel?unitOf(sel):'kg', UU=U.toUpperCase();
 
     const logBlock = sel ? '<div class="log">'+
+      '<div class="unitbar"><span class="ul">Unidad de esta variante</span><div class="useg">'+
+        '<button class="'+(U==='kg'?'on':'')+'" data-unit="kg" data-uv="'+sel+'">KG</button>'+
+        '<button class="'+(U==='lb'?'on':'')+'" data-unit="lb" data-uv="'+sel+'">LB</button>'+
+      '</div></div>'+
       '<div class="goal '+G.c+'"><span class="k">'+G.k+'</span><span class="v">'+G.v+'</span></div>'+
-      L.map(function(r,k){const D=delta(r,pset&&pset[k]);
+      L.map(function(r,k){const D=delta(r,pset&&pset[k],U);
         return '<div class="row">'+
           '<span class="s">S'+(k+1)+'</span>'+
-          '<label class="fld"><input type="text" inputmode="decimal" placeholder="peso" value="'+r.w+'" data-log="'+i+'" data-set="'+k+'" data-f="w" aria-label="Peso serie '+(k+1)+'"><u>KG</u></label>'+
+          '<label class="fld"><input type="text" inputmode="decimal" placeholder="peso" value="'+r.w+'" data-log="'+id+'" data-set="'+k+'" data-f="w" aria-label="Peso serie '+(k+1)+'"><u>'+UU+'</u></label>'+
           '<span class="x">×</span>'+
-          '<label class="fld"><input type="text" inputmode="numeric" placeholder="reps" value="'+r.r+'" data-log="'+i+'" data-set="'+k+'" data-f="r" aria-label="Repeticiones serie '+(k+1)+'"><u>REP</u></label>'+
-          '<span class="delta '+D.c+'" data-d="'+i+'-'+k+'">'+D.x+'</span></div>';}).join('')+
-      (L.length<5?'<button class="addset" data-add="'+i+'">+ serie extra</button>':'')+
+          '<label class="fld"><input type="text" inputmode="numeric" placeholder="reps" value="'+r.r+'" data-log="'+id+'" data-set="'+k+'" data-f="r" aria-label="Repeticiones serie '+(k+1)+'"><u>REP</u></label>'+
+          '<button class="dsb '+(r.ds?'on':'')+'" data-ds="'+id+'|'+k+'" aria-pressed="'+(!!r.ds)+'" aria-label="Marcar serie '+(k+1)+' como dropset">DS</button>'+
+          '<span class="delta '+D.c+'" data-d="'+id+'-'+k+'">'+D.x+'</span></div>'+
+          (r.ds?'<div class="droprow"><span class="dl">↓ Drop</span>'+
+            '<label class="fld"><input type="text" inputmode="decimal" placeholder="peso" value="'+(r.dw||'')+'" data-log="'+id+'" data-set="'+k+'" data-f="dw" aria-label="Peso del descuelgue serie '+(k+1)+'"><u>'+UU+'</u></label>'+
+            '<span class="x">×</span>'+
+            '<label class="fld"><input type="text" inputmode="numeric" placeholder="reps" value="'+(r.dr||'')+'" data-log="'+id+'" data-set="'+k+'" data-f="dr" aria-label="Repeticiones del descuelgue serie '+(k+1)+'"><u>REP</u></label>'+
+          '</div>':'');}).join('')+
+      '<div class="stepper">'+
+        '<button data-sub="'+id+'" '+(L.length<=1?'disabled':'')+' aria-label="Quitar una serie">−</button>'+
+        '<span>'+L.length+' serie'+(L.length===1?'':'s')+'</span>'+
+        '<button data-add="'+id+'" '+(L.length>=6?'disabled':'')+' aria-label="Agregar una serie">+</button>'+
+      '</div>'+
       (h.length?'<details class="hist"><summary>Historial · '+h.length+' sesiones</summary><ul>'+
-        h.slice(0,6).map(x=>'<li><span>'+x.d+'</span>'+(fmt(x.s)||'—')+'</li>').join('')+'</ul></details>':'')+
+        h.slice(0,6).map(x=>'<li><span>'+x.d+'</span>'+(fmt(x.s)||'—')+' '+(x.u||'kg')+'</li>').join('')+'</ul></details>':'')+
       '</div>' : '';
 
     return '<section class="card '+(isDone?'done':'')+' '+(isOpen?'open':'')+'">'+
-      '<button class="head" data-open="'+i+'" aria-expanded="'+isOpen+'">'+
+      '<button class="head" data-open="'+id+'" aria-expanded="'+isOpen+'">'+
         '<span class="num">'+String(i+1).padStart(2,'0')+'</span>'+
         '<span class="body">'+
           '<span class="name">'+e.n+'</span>'+
@@ -480,15 +589,15 @@ function renderDay(){
           (logged?'<span class="tally">'+logged+'</span>':'')+
         '</span>'+
         '<span class="right">'+
-          '<span class="sets">'+e.s+'×</span>'+
-          '<span class="tick" role="checkbox" aria-checked="'+isDone+'" aria-label="Marcar hecho" data-tick="'+i+'">✓</span>'+
+          '<span class="sets">'+nS+'×</span>'+
+          '<span class="tick" role="checkbox" aria-checked="'+isDone+'" aria-label="Marcar hecho" data-tick="'+id+'">✓</span>'+
           '<span class="chev">▾</span>'+
         '</span></button>'+
       '<div class="panel"><div class="opthead">Elige la que esté libre</div>'+
         e.o.map(function(o){
-          const key=i+'|'+o, inf=INFO[o], isG=guide===key;
+          const key=id+'|'+o, inf=INFO[o], isG=guide===key;
           return '<div class="optrow">'+
-            '<button class="opt '+(sel===o?'on':'')+'" data-pick="'+i+'" data-val="'+o+'"><span class="dot"></span>'+o+
+            '<button class="opt '+(sel===o?'on':'')+'" data-pick="'+id+'" data-val="'+o+'"><span class="dot"></span>'+o+
               (sel===o?'<span class="flag">elegida</span>':(used.has(o)?'<span class="stale">ya usada</span>':(prev===o?'<span class="stale">última vez</span>':'')))+
             '</button>'+
             (inf?'<button class="help '+(isG?'on':'')+'" data-guide="'+key+'" aria-expanded="'+isG+'" aria-label="Cómo se hace '+o+'">?</button>':'')+
@@ -505,11 +614,22 @@ function renderDay(){
       '</div></section>';
   }).join('');
 
+  const modeBar='<div class="modes">'+
+    '<div class="segwrap"><span class="seglab">Duración</span><div class="seg">'+
+      '<button class="'+(md==='largo'?'on':'')+'" data-md="largo">Largo</button>'+
+      '<button class="'+(md==='corto'?'on':'')+'" data-md="corto">Corto</button>'+
+    '</div></div>'+
+    ((day==='push'||day==='pull')?'<div class="segwrap"><span class="seglab">Reparto de brazo</span><div class="seg">'+
+      '<button class="'+(sp==='h'?'on':'')+'" data-sp="h">Híbrido</button>'+
+      '<button class="'+(sp==='n'?'on':'')+'" data-sp="n">Normal</button>'+
+    '</div></div>':'')+
+  '</div>';
+
   return '<div class="plate">'+
-      '<div class="eyebrow">'+d.day+' · '+total+' ejercicios</div>'+
-      '<h1>'+d.title+'</h1><p>'+d.sub+'</p>'+
-      '<div class="meter"><div class="bar"><i style="width:'+(doneN/total*100).toFixed(0)+'%"></i></div><span>'+doneN+' / '+total+'</span></div>'+
-    '</div><div class="banner">'+d.note+'</div>'+cards+
+      '<div class="eyebrow">'+d.day+' · '+total+' ejercicios'+(md==='corto'?' · corto':'')+'</div>'+
+      '<h1>'+d.title+'</h1><p>'+txt(d.sub)+'</p>'+
+      '<div class="meter"><div class="bar"><i style="width:'+(total?(doneN/total*100).toFixed(0):0)+'%"></i></div><span>'+doneN+' / '+total+'</span></div>'+
+    '</div>'+modeBar+'<div class="banner">'+txt(d.note)+'</div>'+cards+
     '<div class="finish"><button data-finish '+(doneN===0?'disabled':'')+'>Cerrar sesión de hoy</button>'+
     '<p>Guarda pesos, repeticiones y variantes en el historial. La próxima vez te muestra qué tienes que superar.</p></div>';
 }
@@ -522,6 +642,32 @@ function renderNotes(){
   const n=Object.keys(S.hist).length;
 
   return '<div class="notes">'+
+    '<h2>Convertidor kg ⇄ lb</h2>'+
+    '<div class="conv"><div class="convrow">'+
+      '<label class="fld"><input type="text" inputmode="decimal" id="ckg" data-conv="kg" placeholder="0" aria-label="Kilogramos"><u>KG</u></label>'+
+      '<span class="sw">⇄</span>'+
+      '<label class="fld"><input type="text" inputmode="decimal" id="clb" data-conv="lb" placeholder="0" aria-label="Libras"><u>LB</u></label>'+
+    '</div>'+
+    '<div class="convtab">'+
+      [[5,11],[10,22],[20,44],[25,55],[45,99],[60,132],[100,220]]
+        .map(p=>'<span><b>'+p[0]+'</b> kg ≈ '+p[1]+' lb</span>').join('')+
+    '</div></div>'+
+    '<p>Escribe en cualquiera de los dos y el otro se calcula solo. La conversión exacta es <b>1 kg = 2,20462 lb</b>. Los discos olímpicos suelen venir en 45, 35, 25, 10, 5 y 2,5 lb, que son 20,4 / 15,9 / 11,3 / 4,5 / 2,3 / 1,1 kg.</p>'+
+    '<p>Recuerda que la unidad se elige <b>por variante</b> dentro de cada ficha, no de forma global. Si el hack squat de tu gym está en libras y la prensa en kilos, cada una guarda la suya y el historial no se te mezcla.</p>'+
+
+    '<h2>Largo y corto</h2>'+
+    '<p>Cada día tiene dos versiones. <b>Largo</b> es el entrenamiento completo. <b>Corto</b> deja los compuestos con sus series intactas y recorta los aislamientos, apuntando a unos 40 minutos. La elección se guarda por día, así que puedes tener Push en corto y Piernas en largo al mismo tiempo.</p>'+
+    '<p>Lo que se recorta en corto no es al azar: se van los segundos ángulos de un mismo músculo y baja una serie en los aislamientos que recuperan rápido. Los compuestos grandes nunca pierden series, porque son los que sostienen la progresión.</p>'+
+
+    '<h2>Híbrido y normal</h2>'+
+    '<p>En <b>híbrido</b>, el bíceps va el lunes con Push y el tríceps el martes con Pull. Así cada brazo entra fresco, sin arrastrar la fatiga de los press ni de los remos.</p>'+
+    '<p>En <b>normal</b>, vuelve el reparto clásico: tríceps con Push y bíceps con Pull. Es más lógico de recordar y encadena mejor si haces series seguidas, pero el brazo llega pre-fatigado. Si eliges normal, usa poleas o máquinas para el brazo y no busques el fallo brutal ahí.</p>'+
+    '<p>El cambio es global para Push y Pull, no por día suelto. El Upper mantiene bíceps y tríceps en ambos repartos.</p>'+
+
+    '<h2>Dropsets</h2>'+
+    '<p>El botón <b>DS</b> de cada serie la marca como dropset y abre una fila extra para anotar el descuelgue: el peso menor y las repeticiones que sacaste con él. Es solo un registro, no cambia la estructura de la serie.</p>'+
+    '<p>En el resumen de la ficha las series con dropset salen con un ▼ al lado. Úsalo en la última serie de aislamientos, no en compuestos pesados.</p>'+
+
     '<h2>Cómo funciona la progresión</h2>'+
     '<p>Doble progresión. Te quedas en el mismo peso hasta llegar a <b>10 repeticiones limpias en todas las series</b>, ahí subes el mínimo incremento disponible y vuelves a 8. La ficha lleva la cuenta: cuando cierras las series en 10, el ejercicio te aparece en verde con <b>Sube el peso</b>.</p>'+
     '<p>El historial se guarda <b>por variante</b>, no por casilla. Hack squat y sentadilla libre son cargas distintas, así que cada una lleva su propia progresión y no se contaminan entre sí.'+(n?' Llevas '+n+' variantes registradas.':'')+'</p>'+
@@ -562,13 +708,25 @@ function render(){
 
 /* escribir no redibuja la vista: solo refresca el indicador de esa fila */
 document.addEventListener('input',function(e){
+  const cv=e.target.closest('[data-conv]');
+  if(cv){
+    const v=num(cv.value), to=document.getElementById(cv.dataset.conv==='kg'?'clb':'ckg');
+    if(!to) return;
+    if(cv.value.trim()===''){to.value='';return;}
+    if(v===null) return;
+    to.value=String(+( cv.dataset.conv==='kg' ? v*LB : v/LB ).toFixed(2)).replace(/\.00$/,'');
+    return;
+  }
   const el=e.target.closest('[data-log]'); if(!el) return;
-  const i=+el.dataset.log, k=+el.dataset.set;
-  const L=rows(day,i,DAYS[day].ex[i].s);
-  L[k][el.dataset.f]=el.value.trim(); save();
-  const sel=g('sel',day,i), h=sel?(S.hist[sel]||[]):[];
-  const D=delta(L[k], h.length?h[0].s[k]:null);
-  const chip=document.querySelector('[data-d="'+i+'-'+k+'"]');
+  const id=el.dataset.log, k=+el.dataset.set, f=el.dataset.f;
+  const ex=DAYS[day].ex.find(x=>x.id===id); if(!ex) return;
+  const L=rows(day,id,setsOf(ex,day));
+  if(!L[k]) return;
+  L[k][f]=el.value.trim(); save();
+  if(f==='dw'||f==='dr') return;
+  const sel=g('sel',day,id), h=sel?(S.hist[sel]||[]):[];
+  const D=delta(L[k], h.length?h[0].s[k]:null, sel?unitOf(sel):'kg');
+  const chip=document.querySelector('[data-d="'+id+'-'+k+'"]');
   if(chip){chip.className='delta '+D.c;chip.textContent=D.x;}
 });
 
@@ -576,41 +734,67 @@ document.addEventListener('click',function(e){
   const go=e.target.closest('[data-go]');
   if(go){day=go.dataset.go;open=null;guide=null;scrollTo(0,0);return render();}
 
+  const mdb=e.target.closest('[data-md]');
+  if(mdb){S.mode[day]=mdb.dataset.md;open=null;guide=null;save();return render();}
+
+  const spb=e.target.closest('[data-sp]');
+  if(spb){S.split=spb.dataset.sp;open=null;guide=null;save();return render();}
+
+  const ub=e.target.closest('[data-unit]');
+  if(ub){S.unit[ub.dataset.uv]=ub.dataset.unit;save();return render();}
+
+  const ds=e.target.closest('[data-ds]');
+  if(ds){
+    const p=ds.dataset.ds.split('|'), id=p[0], k=+p[1];
+    const ex=DAYS[day].ex.find(x=>x.id===id); if(!ex) return;
+    const L=rows(day,id,setsOf(ex,day));
+    if(L[k]){L[k].ds=!L[k].ds; if(!L[k].ds){L[k].dw='';L[k].dr='';}}
+    save();return render();
+  }
+
   const tick=e.target.closest('[data-tick]');
-  if(tick){e.stopPropagation();const i=+tick.dataset.tick;set('done',day,i,!g('done',day,i));return render();}
+  if(tick){e.stopPropagation();const id=tick.dataset.tick;set('done',day,id,!g('done',day,id));return render();}
 
   const add=e.target.closest('[data-add]');
-  if(add){const i=+add.dataset.add;rows(day,i,DAYS[day].ex[i].s).push({w:'',r:''});save();return render();}
+  if(add){const id=add.dataset.add,ex=DAYS[day].ex.find(x=>x.id===id);
+    if(ex)rows(day,id,setsOf(ex,day)).push({w:'',r:''});save();return render();}
+
+  const sub=e.target.closest('[data-sub]');
+  if(sub){const id=sub.dataset.sub,ex=DAYS[day].ex.find(x=>x.id===id);
+    if(ex){const L=rows(day,id,setsOf(ex,day)); if(L.length>1)L.pop();}
+    save();return render();}
 
   const gd=e.target.closest('[data-guide]');
   if(gd){const k=gd.dataset.guide;guide=(guide===k?null:k);return render();}
 
   const pick=e.target.closest('[data-pick]');
   if(pick){
-    const i=+pick.dataset.pick, v=pick.dataset.val, cur=g('sel',day,i);
-    set('sel',day,i,cur===v?null:v);
-    S.log[day]=S.log[day]||{}; delete S.log[day][i];
+    const id=pick.dataset.pick, v=pick.dataset.val, cur=g('sel',day,id);
+    set('sel',day,id,cur===v?null:v);
+    S.log[day]=S.log[day]||{}; delete S.log[day][id];
     save(); return render();
   }
 
   const head=e.target.closest('[data-open]');
-  if(head){const i=+head.dataset.open;open=(open===i?null:i);guide=null;return render();}
+  if(head){const id=head.dataset.open;open=(open===id?null:id);guide=null;return render();}
 
   if(e.target.closest('[data-finish]')){
     const stamp=new Date().toLocaleDateString('es-CL',{day:'2-digit',month:'short'});
-    DAYS[day].ex.forEach(function(_,i){
-      const v=g('sel',day,i), L=(S.log[day]||{})[i];
+    exList(day).forEach(function(ex){
+      const v=g('sel',day,ex.id), L=(S.log[day]||{})[ex.id];
       if(!v||!L) return;
       const s=L.filter(x=>x.w!==''||x.r!=='');
       if(!s.length) return;
-      S.hist[v]=[{d:stamp,s:s.map(x=>({w:x.w,r:x.r}))}].concat(S.hist[v]||[]).slice(0,12);
+      S.hist[v]=[{d:stamp,u:unitOf(v),s:s.map(x=>({w:x.w,r:x.r,ds:!!x.ds,dw:x.dw||'',dr:x.dr||''}))}]
+        .concat(S.hist[v]||[]).slice(0,12);
     });
     S.last[day]=Object.assign({},S.last[day],S.sel[day]);
     S.sel[day]={};S.done[day]={};S.log[day]={};
     save();open=null;scrollTo(0,0);return render();
   }
 
-  if(e.target.closest('[data-reset]')){S={sel:{},done:{},last:{},log:{},hist:{}};save();return render();}
+  if(e.target.closest('[data-reset]')){
+    S={sel:{},done:{},last:{},log:{},hist:{},mode:{},split:'h',unit:{}};save();return render();}
 });
 
 load();
