@@ -214,8 +214,8 @@
   .useg button.on{background:var(--card2);color:var(--bone);font-weight:600;box-shadow:inset 0 0 0 1px var(--accent)}
 
   /* --- Dropset --- */
-  .log .row{gap:6px}
-  .log .delta{width:42px}
+  .log .row{gap:5px}
+  .log .delta{width:47px;font-size:9px;white-space:nowrap;letter-spacing:0}
   .dsb{flex:none;width:30px;padding:9px 0;background:none;border:1px solid var(--line);border-radius:6px;
        color:var(--dim);cursor:pointer;font-family:'IBM Plex Mono',monospace;font-size:9.5px;
        letter-spacing:.02em;transition:.12s}
@@ -229,6 +229,12 @@
   .droprow .fld input{font-size:14.5px;padding:7px 0}
   .dnote{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--dim);
          letter-spacing:.05em;margin:-4px 0 9px 43px}
+
+  /* --- Equivalencia en la otra unidad --- */
+  .equiv{display:flex;gap:7px;align-items:baseline;margin:2px 0 4px 28px;
+         font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--dim);letter-spacing:.03em}
+  .equiv b{color:var(--accent);font-weight:600;flex:none}
+  .goal .v i{color:var(--dim);font-style:normal;font-size:.9em}
 
   /* --- Stepper de series --- */
   .stepper{display:flex;align-items:center;gap:9px;margin-top:5px}
@@ -505,29 +511,42 @@ const fmt=s=>s.filter(x=>x.w||x.r).map(x=>(x.w||'–')+'×'+(x.r||'–')+(x.ds?'
 const num=v=>{const n=parseFloat(String(v).replace(',','.'));return isNaN(n)?null:n;};
 function usedThisWeek(){const u=new Set();['push','pull'].forEach(d=>Object.values(S.sel[d]||{}).forEach(v=>u.add(v)));return u;}
 
+/* Conversión de unidades. Todo lo que se compara pasa por aquí, así que
+   cambiar de kg a lb entre sesiones no rompe la progresión. */
+const conv=(v,from,to)=>(from===to)?v:(from==='lb'?v/LB:v*LB);
+const r1=v=>Math.round(v*10)/10;                 /* una décima basta: el gym no es un laboratorio */
+const other=u=>u==='kg'?'lb':'kg';
+/* peso de un set expresado en la unidad U, venga de donde venga */
+const inU=(w,from,U)=>{const n=num(w);return n===null?null:r1(conv(n,from,U));};
+
 function goal(v){
   const h=S.hist[v], U=unitOf(v);
   if(!h||!h.length) return {c:'none',k:'Sin registro',v:'Primera vez con esta variante. Anota peso y repeticiones para tener contra qué progresar.'};
+  const hu=h[0].u||'kg';
   const last=h[0].s.filter(x=>num(x.w)!==null&&num(x.r)!==null);
   if(!last.length) return {c:'none',k:'Sin registro',v:'La última sesión quedó incompleta.'};
-  const hu=h[0].u||'kg';
-  if(hu!==U) return {c:'none',k:'Cambió la unidad',v:'La última vez lo anotaste en <b>'+hu+'</b> y ahora estás en <b>'+U+'</b>. Anota esta sesión y desde la próxima vuelve a compararte.'};
-  const w=Math.max.apply(null,last.map(x=>num(x.w)));
-  if(last.every(x=>num(x.r)>=TOP))
-    return {c:'rise',k:'Sube el peso',v:'Cerraste <b>'+TOP+' repeticiones en todas las series</b> con '+w+' '+U+'. Sube al siguiente incremento y vuelve a 8.'};
-  return {c:'hold',k:'Mismo peso',v:'Última vez: <b>'+last.map(x=>x.w+'×'+x.r).join('  ')+'</b>. Mantén el peso y busca una repetición más en cada serie.'};
+  /* la sesión anterior, traída a la unidad de hoy */
+  const cv=last.map(x=>({w:inU(x.w,hu,U),r:num(x.r)}));
+  const nota=(hu!==U)?' <i>(convertido desde '+hu+')</i>':'';
+  const w=Math.max.apply(null,cv.map(x=>x.w));
+  if(cv.every(x=>x.r>=TOP))
+    return {c:'rise',k:'Sube el peso',v:'Cerraste <b>'+TOP+' repeticiones en todas las series</b> con '+w+' '+U+nota+'. Sube al siguiente incremento y vuelve a 8.'};
+  return {c:'hold',k:'Mismo peso',v:'Última vez: <b>'+cv.map(x=>x.w+'×'+x.r).join('  ')+' '+U+'</b>'+nota+'. Mantén el peso y busca una repetición más en cada serie.'};
 }
 
-function delta(cur,prev,u){
+/* pu = unidad en que se anotó la serie anterior; se convierte antes de comparar */
+function delta(cur,prev,u,pu){
   const cw=num(cur.w),cr=num(cur.r);
   if(cw===null||cr===null||!prev) return {c:'',x:''};
-  const pw=num(prev.w),pr=num(prev.r);
-  if(pw===null||pr===null) return {c:'',x:''};
-  const U=u||'kg';
-  if(cw>pw) return {c:'u',x:'+'+(+(cw-pw).toFixed(1))+' '+U};
-  if(cw<pw) return {c:'d',x:'-'+(+(pw-cw).toFixed(1))+' '+U};
-  if(cr>pr) return {c:'u',x:'+'+(cr-pr)+' rep'};
-  if(cr<pr) return {c:'d',x:'-'+(pr-cr)+' rep'};
+  const cr2=num(prev.r); const pw=inU(prev.w,pu||'kg',u||'kg');
+  if(pw===null||cr2===null) return {c:'',x:''};
+  const U=u||'kg', d=r1(cw-pw);
+  /* zona muerta: bajo esto es ruido de redondeo entre unidades, no progreso real */
+  const tol=(U==='lb')?0.5:0.25;
+  if(d>tol) return {c:'u',x:'+'+d+' '+U};
+  if(d<-tol) return {c:'d',x:'-'+Math.abs(d)+' '+U};
+  if(cr>cr2) return {c:'u',x:'+'+(cr-cr2)+' rep'};
+  if(cr<cr2) return {c:'d',x:'-'+(cr2-cr)+' rep'};
   return {c:'e',x:'='};
 }
 
@@ -548,7 +567,10 @@ function renderDay(){
     const sel=g('sel',day,id), prev=g('last',day,id), isDone=!!g('done',day,id), isOpen=open===id;
     const L=rows(day,id,nS), logged=fmt(L);
     const h=sel?(S.hist[sel]||[]):[], G=sel?goal(sel):null, pset=h.length?h[0].s:null;
-    const U=sel?unitOf(sel):'kg', UU=U.toUpperCase();
+    const pu=h.length?(h[0].u||'kg'):'kg';
+    const U=sel?unitOf(sel):'kg', UU=U.toUpperCase(), O=other(U);
+    /* equivalencia de lo anotado hoy, en la otra unidad */
+    const eq=L.map(function(r){const n=inU(r.w,U,O);return n===null?null:n+'×'+(r.r||'–');}).filter(Boolean);
 
     const logBlock = sel ? '<div class="log">'+
       '<div class="unitbar"><span class="ul">Unidad de esta variante</span><div class="useg">'+
@@ -556,7 +578,7 @@ function renderDay(){
         '<button class="'+(U==='lb'?'on':'')+'" data-unit="lb" data-uv="'+sel+'">LB</button>'+
       '</div></div>'+
       '<div class="goal '+G.c+'"><span class="k">'+G.k+'</span><span class="v">'+G.v+'</span></div>'+
-      L.map(function(r,k){const D=delta(r,pset&&pset[k],U);
+      L.map(function(r,k){const D=delta(r,pset&&pset[k],U,pu);
         return '<div class="row">'+
           '<span class="s">S'+(k+1)+'</span>'+
           '<label class="fld"><input type="text" inputmode="decimal" placeholder="peso" value="'+r.w+'" data-log="'+id+'" data-set="'+k+'" data-f="w" aria-label="Peso serie '+(k+1)+'"><u>'+UU+'</u></label>'+
@@ -569,6 +591,7 @@ function renderDay(){
             '<span class="x">×</span>'+
             '<label class="fld"><input type="text" inputmode="numeric" placeholder="reps" value="'+(r.dr||'')+'" data-log="'+id+'" data-set="'+k+'" data-f="dr" aria-label="Repeticiones del descuelgue serie '+(k+1)+'"><u>REP</u></label>'+
           '</div>':'');}).join('')+
+      (eq.length?'<div class="equiv"><b>≈</b>'+eq.join('  ')+' '+O+'</div>':'')+
       '<div class="stepper">'+
         '<button data-sub="'+id+'" '+(L.length<=1?'disabled':'')+' aria-label="Quitar una serie">−</button>'+
         '<span>'+L.length+' serie'+(L.length===1?'':'s')+'</span>'+
@@ -653,7 +676,9 @@ function renderNotes(){
         .map(p=>'<span><b>'+p[0]+'</b> kg ≈ '+p[1]+' lb</span>').join('')+
     '</div></div>'+
     '<p>Escribe en cualquiera de los dos y el otro se calcula solo. La conversión exacta es <b>1 kg = 2,20462 lb</b>. Los discos olímpicos suelen venir en 45, 35, 25, 10, 5 y 2,5 lb, que son 20,4 / 15,9 / 11,3 / 4,5 / 2,3 / 1,1 kg.</p>'+
-    '<p>Recuerda que la unidad se elige <b>por variante</b> dentro de cada ficha, no de forma global. Si el hack squat de tu gym está en libras y la prensa en kilos, cada una guarda la suya y el historial no se te mezcla.</p>'+
+    '<p>Recuerda que la unidad se elige <b>por variante</b> dentro de cada ficha, no de forma global. Si el hack squat de tu gym está en libras y la prensa en kilos, cada una guarda la suya.</p>'+
+    '<p>Cambiar de unidad <b>no rompe la progresión</b>. Si un día anotas en kg y al siguiente en libras, la app convierte por dentro y te sigue comparando contra la sesión anterior. Cuando la comparación viene de otra unidad, el objetivo te lo dice con un <i>(convertido desde…)</i>.</p>'+
+    '<p>Además, al tocar KG o LB dentro de una ficha, lo que ya tengas escrito <b>se convierte solo</b>: no tienes que volver a escribir nada. Y bajo las series aparece siempre la equivalencia en la otra unidad, redondeada a una décima. No busques precisión de laboratorio ahí: los discos de gimnasio ya vienen redondeados de fábrica y 45 lb rara vez son exactamente 20,4 kg en la práctica.</p>'+
 
     '<h2>Largo y corto</h2>'+
     '<p>Cada día tiene dos versiones. <b>Largo</b> es el entrenamiento completo. <b>Corto</b> deja los compuestos con sus series intactas y recorta los aislamientos, apuntando a unos 40 minutos. La elección se guarda por día, así que puedes tener Push en corto y Piernas en largo al mismo tiempo.</p>'+
@@ -741,7 +766,22 @@ document.addEventListener('click',function(e){
   if(spb){S.split=spb.dataset.sp;open=null;guide=null;save();return render();}
 
   const ub=e.target.closest('[data-unit]');
-  if(ub){S.unit[ub.dataset.uv]=ub.dataset.unit;save();return render();}
+  if(ub){
+    const v=ub.dataset.uv, to=ub.dataset.unit, from=unitOf(v);
+    if(from!==to){
+      /* convierte lo que ya está escrito hoy, para no retipear nada */
+      exList(day).forEach(function(ex){
+        if(g('sel',day,ex.id)!==v) return;
+        const L=(S.log[day]||{})[ex.id]; if(!L) return;
+        L.forEach(function(r){
+          const w=num(r.w); if(r.w!==''&&w!==null) r.w=String(r1(conv(w,from,to)));
+          const dw=num(r.dw); if(r.dw&&dw!==null) r.dw=String(r1(conv(dw,from,to)));
+        });
+      });
+      S.unit[v]=to;
+    }
+    save();return render();
+  }
 
   const ds=e.target.closest('[data-ds]');
   if(ds){
