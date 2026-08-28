@@ -229,6 +229,15 @@
   .droprow .fld input{font-size:14.5px;padding:7px 0}
   .dnote{font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:var(--dim);
          letter-spacing:.05em;margin:-4px 0 9px 43px}
+  .dstep{display:flex;align-items:center;gap:7px;margin:-2px 0 10px 30px;padding-left:11px;
+         border-left:2px solid var(--line)}
+  .dstep button{flex:none;width:30px;padding:5px 0;background:none;border:1px dashed var(--line);
+                border-radius:5px;color:var(--dim);cursor:pointer;
+                font-family:'IBM Plex Mono',monospace;font-size:12px;line-height:1}
+  .dstep button:disabled{opacity:.3;cursor:default}
+  .dstep button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+  .dstep span{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.1em;
+              text-transform:uppercase;color:var(--dim)}
 
   /* --- Equivalencia en la otra unidad --- */
   .equiv{display:flex;gap:7px;align-items:baseline;margin:2px 0 4px 28px;
@@ -497,7 +506,22 @@ async function load(){
   try{const v=await STORE.get(); if(v) S=Object.assign(S,JSON.parse(v));}catch(e){}
   ['sel','done','last','log','hist','mode','unit'].forEach(k=>{S[k]=S[k]||{}});
   if(S.split!=='h'&&S.split!=='n') S.split='h';
+  migrateDrops();
   render();
+}
+
+/* El dropset era uno solo (ds/dw/dr). Ahora es una lista d:[{w,r},...].
+   Convierte lo viejo para no perder nada de lo ya anotado. */
+function migrateDrops(){
+  const fix=function(r){
+    if(!r||Array.isArray(r.d)) return;
+    if(r.ds&&(r.dw||r.dr)) r.d=[{w:r.dw||'',r:r.dr||''}];
+    else if(r.ds) r.d=[{w:'',r:''}];
+    else r.d=[];
+    delete r.ds;delete r.dw;delete r.dr;
+  };
+  Object.values(S.log||{}).forEach(d=>Object.values(d||{}).forEach(L=>Array.isArray(L)&&L.forEach(fix)));
+  Object.values(S.hist||{}).forEach(H=>Array.isArray(H)&&H.forEach(e=>Array.isArray(e.s)&&e.s.forEach(fix)));
 }
 function save(){
   clearTimeout(timer);
@@ -507,7 +531,9 @@ function save(){
 const g=(o,d,i)=>(S[o][d]&&S[o][d][i])||null;
 function set(o,d,i,v){(S[o][d]=S[o][d]||{})[i]=v;save();}
 function rows(d,i,n){S.log[d]=S.log[d]||{};if(!S.log[d][i])S.log[d][i]=Array.from({length:n},()=>({w:'',r:''}));return S.log[d][i];}
-const fmt=s=>s.filter(x=>x.w||x.r).map(x=>(x.w||'–')+'×'+(x.r||'–')+(x.ds?'▼':'')).join('  ');
+const nd=x=>(x&&Array.isArray(x.d))?x.d.filter(z=>z.w||z.r).length:0;
+const fmt=s=>s.filter(x=>x.w||x.r||nd(x)).map(function(x){
+  const n=nd(x);return (x.w||'–')+'×'+(x.r||'–')+(n?'▼'+(n>1?n:''):'');}).join('  ');
 const num=v=>{const n=parseFloat(String(v).replace(',','.'));return isNaN(n)?null:n;};
 function usedThisWeek(){const u=new Set();['push','pull'].forEach(d=>Object.values(S.sel[d]||{}).forEach(v=>u.add(v)));return u;}
 
@@ -579,17 +605,24 @@ function renderDay(){
       '</div></div>'+
       '<div class="goal '+G.c+'"><span class="k">'+G.k+'</span><span class="v">'+G.v+'</span></div>'+
       L.map(function(r,k){const D=delta(r,pset&&pset[k],U,pu);
+        const D2=Array.isArray(r.d)?r.d:[];
         return '<div class="row">'+
           '<span class="s">S'+(k+1)+'</span>'+
           '<label class="fld"><input type="text" inputmode="decimal" placeholder="peso" value="'+r.w+'" data-log="'+id+'" data-set="'+k+'" data-f="w" aria-label="Peso serie '+(k+1)+'"><u>'+UU+'</u></label>'+
           '<span class="x">×</span>'+
           '<label class="fld"><input type="text" inputmode="numeric" placeholder="reps" value="'+r.r+'" data-log="'+id+'" data-set="'+k+'" data-f="r" aria-label="Repeticiones serie '+(k+1)+'"><u>REP</u></label>'+
-          '<button class="dsb '+(r.ds?'on':'')+'" data-ds="'+id+'|'+k+'" aria-pressed="'+(!!r.ds)+'" aria-label="Marcar serie '+(k+1)+' como dropset">DS</button>'+
+          '<button class="dsb '+(D2.length?'on':'')+'" data-ds="'+id+'|'+k+'" aria-pressed="'+(D2.length>0)+'" aria-label="Marcar serie '+(k+1)+' como dropset">DS</button>'+
           '<span class="delta '+D.c+'" data-d="'+id+'-'+k+'">'+D.x+'</span></div>'+
-          (r.ds?'<div class="droprow"><span class="dl">↓ Drop</span>'+
-            '<label class="fld"><input type="text" inputmode="decimal" placeholder="peso" value="'+(r.dw||'')+'" data-log="'+id+'" data-set="'+k+'" data-f="dw" aria-label="Peso del descuelgue serie '+(k+1)+'"><u>'+UU+'</u></label>'+
+          D2.map(function(dr,j){
+            return '<div class="droprow"><span class="dl">↓ D'+(j+1)+'</span>'+
+            '<label class="fld"><input type="text" inputmode="decimal" placeholder="peso" value="'+(dr.w||'')+'" data-log="'+id+'" data-set="'+k+'" data-di="'+j+'" data-f="w" aria-label="Peso del descuelgue '+(j+1)+' de la serie '+(k+1)+'"><u>'+UU+'</u></label>'+
             '<span class="x">×</span>'+
-            '<label class="fld"><input type="text" inputmode="numeric" placeholder="reps" value="'+(r.dr||'')+'" data-log="'+id+'" data-set="'+k+'" data-f="dr" aria-label="Repeticiones del descuelgue serie '+(k+1)+'"><u>REP</u></label>'+
+            '<label class="fld"><input type="text" inputmode="numeric" placeholder="reps" value="'+(dr.r||'')+'" data-log="'+id+'" data-set="'+k+'" data-di="'+j+'" data-f="r" aria-label="Repeticiones del descuelgue '+(j+1)+' de la serie '+(k+1)+'"><u>REP</u></label>'+
+          '</div>';}).join('')+
+          (D2.length?'<div class="dstep">'+
+            '<button data-dsub="'+id+'|'+k+'" aria-label="Quitar un descuelgue">−</button>'+
+            '<span>'+D2.length+' descuelgue'+(D2.length===1?'':'s')+'</span>'+
+            '<button data-dadd="'+id+'|'+k+'" '+(D2.length>=4?'disabled':'')+' aria-label="Agregar otro descuelgue">+</button>'+
           '</div>':'');}).join('')+
       (eq.length?'<div class="equiv"><b>≈</b>'+eq.join('  ')+' '+O+'</div>':'')+
       '<div class="stepper">'+
@@ -747,8 +780,12 @@ document.addEventListener('input',function(e){
   const ex=DAYS[day].ex.find(x=>x.id===id); if(!ex) return;
   const L=rows(day,id,setsOf(ex,day));
   if(!L[k]) return;
+  if(el.dataset.di!==undefined){          /* fila de descuelgue */
+    const j=+el.dataset.di;
+    if(Array.isArray(L[k].d)&&L[k].d[j]){L[k].d[j][f]=el.value.trim();save();}
+    return;
+  }
   L[k][f]=el.value.trim(); save();
-  if(f==='dw'||f==='dr') return;
   const sel=g('sel',day,id), h=sel?(S.hist[sel]||[]):[];
   const D=delta(L[k], h.length?h[0].s[k]:null, sel?unitOf(sel):'kg');
   const chip=document.querySelector('[data-d="'+id+'-'+k+'"]');
@@ -775,7 +812,9 @@ document.addEventListener('click',function(e){
         const L=(S.log[day]||{})[ex.id]; if(!L) return;
         L.forEach(function(r){
           const w=num(r.w); if(r.w!==''&&w!==null) r.w=String(r1(conv(w,from,to)));
-          const dw=num(r.dw); if(r.dw&&dw!==null) r.dw=String(r1(conv(dw,from,to)));
+          if(Array.isArray(r.d)) r.d.forEach(function(z){
+            const zw=num(z.w); if(z.w&&zw!==null) z.w=String(r1(conv(zw,from,to)));
+          });
         });
       });
       S.unit[v]=to;
@@ -783,12 +822,17 @@ document.addEventListener('click',function(e){
     save();return render();
   }
 
-  const ds=e.target.closest('[data-ds]');
-  if(ds){
-    const p=ds.dataset.ds.split('|'), id=p[0], k=+p[1];
+  /* DS enciende o apaga la cascada entera; dadd/dsub agregan o quitan descuelgues */
+  const dz=e.target.closest('[data-ds],[data-dadd],[data-dsub]');
+  if(dz){
+    const kind=dz.dataset.ds?'t':(dz.dataset.dadd?'a':'s');
+    const p=(dz.dataset.ds||dz.dataset.dadd||dz.dataset.dsub).split('|'), id=p[0], k=+p[1];
     const ex=DAYS[day].ex.find(x=>x.id===id); if(!ex) return;
-    const L=rows(day,id,setsOf(ex,day));
-    if(L[k]){L[k].ds=!L[k].ds; if(!L[k].ds){L[k].dw='';L[k].dr='';}}
+    const L=rows(day,id,setsOf(ex,day)); const r=L[k]; if(!r) return;
+    if(!Array.isArray(r.d)) r.d=[];
+    if(kind==='t') r.d = r.d.length ? [] : [{w:'',r:''}];
+    else if(kind==='a'){ if(r.d.length<4) r.d.push({w:'',r:''}); }
+    else { r.d.pop(); }
     save();return render();
   }
 
@@ -823,9 +867,10 @@ document.addEventListener('click',function(e){
     exList(day).forEach(function(ex){
       const v=g('sel',day,ex.id), L=(S.log[day]||{})[ex.id];
       if(!v||!L) return;
-      const s=L.filter(x=>x.w!==''||x.r!=='');
+      const s=L.filter(x=>x.w!==''||x.r!==''||nd(x));
       if(!s.length) return;
-      S.hist[v]=[{d:stamp,u:unitOf(v),s:s.map(x=>({w:x.w,r:x.r,ds:!!x.ds,dw:x.dw||'',dr:x.dr||''}))}]
+      S.hist[v]=[{d:stamp,u:unitOf(v),s:s.map(x=>({w:x.w,r:x.r,
+        d:(Array.isArray(x.d)?x.d.filter(z=>z.w||z.r).map(z=>({w:z.w,r:z.r})):[])}))}]
         .concat(S.hist[v]||[]).slice(0,12);
     });
     S.last[day]=Object.assign({},S.last[day],S.sel[day]);
