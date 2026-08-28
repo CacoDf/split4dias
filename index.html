@@ -4,6 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Split 4 Días</title>
 <meta name="theme-color" content="#16130F">
+<meta name="app-version" content="2026.08.28-1">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -754,6 +755,8 @@ function renderNotes(){
 
     '<h2>Volumen semanal</h2>'+
     '<table><tr><th>Músculo</th><th>Series</th><th>Frec.</th></tr>'+rws+'</table>'+
+    '<h2>Versión</h2>'+
+    '<p>Estás usando la <b>'+((document.querySelector('meta[name="app-version"]')||{}).content||'?')+'</b>. La app revisa sola si hay una versión nueva cada vez que la abres y se recarga si la encuentra, así que ya no necesitas cerrarla a la fuerza después de cada actualización. Si no hay señal, simplemente sigue con la que tiene.</p>'+
     '<button class="reset" data-reset>Borrar todo el historial</button></div>';
 }
 
@@ -883,6 +886,31 @@ document.addEventListener('click',function(e){
 });
 
 load();
+
+/* --- Auto-actualización ---------------------------------------------------
+   iOS guarda en caché la página del ícono y se queda con la versión vieja
+   después de cada update. Al abrir la app pedimos el archivo saltándonos la
+   caché, comparamos su número de versión con el que está corriendo y, si
+   cambió, recargamos una vez. Sin señal falla en silencio y no molesta. */
+const VER=(document.querySelector('meta[name="app-version"]')||{}).content||'0';
+
+async function checkUpdate(){
+  try{
+    const url=location.pathname+'?cb='+Date.now();
+    const res=await fetch(url,{cache:'no-store'});
+    if(!res.ok) return;
+    const txt=await res.text();
+    /* regex armado desde string para que este archivo no se auto-detecte */
+    const m=txt.match(new RegExp('app-version"\\s+content="([^"]+)"'));
+    if(!m) return;
+    const nueva=m[1];
+    if(nueva===VER) return;
+    /* si ya veníamos de un intento con esa misma versión, no insistir */
+    if(new URLSearchParams(location.search).get('v')===nueva) return;
+    location.replace(location.pathname+'?v='+encodeURIComponent(nueva));
+  }catch(e){/* sin señal o error de red: seguimos con lo que ya está cargado */}
+}
+setTimeout(checkUpdate,1200);
 </script>
 
 </html>
