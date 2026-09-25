@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Split 4 Días</title>
 <meta name="theme-color" content="#16130F">
-<meta name="app-version" content="2026.08.28-1">
+<meta name="app-version" content="2026.09.25-1">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -285,27 +285,27 @@ const DAYS = {
     {id:'p1',n:'Press inclinado',t:'Pecho superior',s:3,sh:1,o:['Press inclinado con mancuernas','Press inclinado en Hammer','Press inclinado en Smith','Press inclinado con barra']},
     {id:'p2',n:'Press plano o fondos',t:'Pecho medio y bajo',s:2,o:['Press plano con mancuernas','Press plano en Smith','Chest press en máquina','Dips','Press banca con barra']},
     {id:'p3',n:'Apertura',t:'Pecho en estiramiento',s:2,sh:1,o:['Pec deck','Cruces en polea a la altura del pecho','Cruces en polea de alto a bajo','Cruces en polea de bajo a alto','Aperturas con mancuernas en inclinado']},
-    {id:'p4',n:'Press vertical',t:'Deltoide anterior',s:2,sh:1,o:['Press militar con mancuernas','Press militar con barra','Press de hombro en máquina','Press militar en Smith','Arnold press']},
+    {id:'p4',n:'Press vertical',t:'Deltoide anterior',s:2,o:['Press militar con mancuernas','Press militar con barra','Press de hombro en máquina','Press militar en Smith','Arnold press']},
     {id:'p5',n:'Elevación lateral',t:'Deltoide medio',s:3,sh:1,ss:2,o:['Elevación lateral en polea','Elevación lateral con mancuernas','Elevación lateral en máquina','Elevación lateral sentado']},
-    {id:'p6',n:'Curl cabeza larga',t:'Brazo detrás del cuerpo',s:2,sh:1,only:'h',o:['Curl inclinado con mancuernas','Curl en polea detrás del cuerpo','Curl con EZ codos atrás']},
-    {id:'p7',n:'Curl cabeza corta',t:'Braquial y pico',s:2,only:'h',o:['Preacher curl con EZ','Preacher curl en máquina','Spider curl','Curl martillo','Curl inverso con EZ','Curl concentrado']},
+    {id:'p6',n:'Curl cabeza larga',t:'Brazo detrás del cuerpo',s:2,sh:1,only:'h',o:['Curl inclinado con mancuernas','Curl en polea detrás del cuerpo','Curl con EZ codos atrás','Curl martillo','Curl martillo estricto']},
+    {id:'p7',n:'Curl cabeza corta',t:'Braquial y pico',s:2,sh:1,only:'h',o:['Preacher curl con EZ','Preacher curl en máquina','Spider curl','Curl martillo','Curl martillo estricto','Curl inverso con EZ','Curl concentrado']},
     {id:'p8',n:'Extensión overhead',t:'Cabeza larga del tríceps',s:2,sh:1,only:'n',o:['Extensión overhead en polea con cuerda','Extensión overhead con mancuerna sentado','Press francés con EZ acostado','Extensión overhead en máquina','Extensión overhead unilateral en polea']},
-    {id:'p9',n:'Push-down',t:'Cabeza lateral y medial',s:2,only:'n',o:['Push-down con cuerda','Push-down con barra recta o V','Push-down unilateral agarre inverso','Fondos en máquina','Press cerrado en Smith']}]},
+    {id:'p9',n:'Push-down',t:'Cabeza lateral y medial',s:2,sh:1,only:'n',o:['Push-down con cuerda','Push-down con barra recta o V','Push-down unilateral agarre inverso','Fondos en máquina','Press cerrado en Smith']}]},
 
   pull:{label:'Pull',day:'Martes',color:'var(--pull)',title:'PULL',
     sub:{h:'Espalda · Deltoide posterior · Tríceps',n:'Espalda · Deltoide posterior · Bíceps'},
     note:{h:'Híbrido: el tríceps entra fresco porque ningún remo ni jalón lo toca.',
           n:'Reparto clásico: el bíceps cierra el día, ya cargado por remos y jalones. Dos series bien hechas bastan.'},ex:[
-    {id:'u1',n:'Remo para dorsal',t:'Codo pegado al cuerpo',s:3,sh:1,o:['Remo con mancuerna a un brazo','Remo en polea baja agarre neutro','Remo en máquina agarre neutro','Remo con barra agarre supino','Meadows row']},
+    {id:'u1',n:'Remo para dorsal',t:'Codo pegado al cuerpo',s:3,o:['Remo con mancuerna a un brazo','Remo en polea baja agarre neutro','Remo en máquina agarre neutro','Remo con barra agarre supino','Meadows row']},
     {id:'u2',n:'Remo espalda alta',t:'Codo abierto 45 a 90°',s:2,sh:1,o:['Remo en máquina agarre pronado ancho','Remo con mancuernas apoyado en banco','Remo en polea sentado con barra ancha','Remo en T agarre ancho','Seal row']},
     {id:'u3',n:'Jalón para dorsal',t:'Agarre cerrado o neutro',s:2,o:['Lat pulldown agarre neutro estrecho','Dominadas supinas o neutras','Lat pulldown unilateral','Pullover en polea']},
     {id:'u4',n:'Jalón espalda alta',t:'Codos abiertos',s:2,o:['Lat pulldown agarre pronado ancho','High row en máquina','Dominadas pronadas anchas','Lat pulldown con codos abiertos']},
     {id:'u10',n:'Jalón',t:'Elige dorsal o espalda alta',s:2,sh:1,co:1,o:['Lat pulldown agarre neutro estrecho','Dominadas supinas o neutras','Lat pulldown unilateral','Pullover en polea','Lat pulldown agarre pronado ancho','High row en máquina','Dominadas pronadas anchas','Lat pulldown con codos abiertos']},
     {id:'u5',n:'Deltoide posterior',t:'Cabeza posterior',s:3,sh:1,ss:2,o:['Reverse pec deck','Cruces invertidos en polea','Pájaros en banco inclinado','Face pull','Reverse fly unilateral en polea']},
     {id:'u6',n:'Extensión overhead',t:'Cabeza larga del tríceps',s:2,sh:1,only:'h',o:['Extensión overhead en polea con cuerda','Extensión overhead con mancuerna sentado','Press francés con EZ acostado','Extensión overhead en máquina','Extensión overhead unilateral en polea']},
-    {id:'u7',n:'Push-down',t:'Cabeza lateral y medial',s:2,only:'h',o:['Push-down con cuerda','Push-down con barra recta o V','Push-down unilateral agarre inverso','Fondos en máquina','Press cerrado en Smith']},
-    {id:'u8',n:'Curl cabeza larga',t:'Brazo detrás del cuerpo',s:2,sh:1,only:'n',o:['Curl inclinado con mancuernas','Curl en polea detrás del cuerpo','Curl con EZ codos atrás']},
-    {id:'u9',n:'Curl cabeza corta',t:'Braquial y pico',s:2,only:'n',o:['Preacher curl con EZ','Preacher curl en máquina','Spider curl','Curl martillo','Curl inverso con EZ','Curl concentrado']}]},
+    {id:'u7',n:'Push-down',t:'Cabeza lateral y medial',s:2,sh:1,only:'h',o:['Push-down con cuerda','Push-down con barra recta o V','Push-down unilateral agarre inverso','Fondos en máquina','Press cerrado en Smith']},
+    {id:'u8',n:'Curl cabeza larga',t:'Brazo detrás del cuerpo',s:2,sh:1,only:'n',o:['Curl inclinado con mancuernas','Curl en polea detrás del cuerpo','Curl con EZ codos atrás','Curl martillo','Curl martillo estricto']},
+    {id:'u9',n:'Curl cabeza corta',t:'Braquial y pico',s:2,sh:1,only:'n',o:['Preacher curl con EZ','Preacher curl en máquina','Spider curl','Curl martillo','Curl martillo estricto','Curl inverso con EZ','Curl concentrado']}]},
 
   legs:{label:'Piernas',day:'Miércoles',color:'var(--legs)',title:'PIERNAS',
     sub:{h:'Tu rutina de piernas + abdomen',n:'Tu rutina de piernas + abdomen'},
@@ -331,7 +331,7 @@ const DAYS = {
     {id:'x6',n:'Elevación lateral',t:'Deltoide medio',s:3,sh:1,ss:2,o:['Elevación lateral en polea','Elevación lateral con mancuernas','Elevación lateral en máquina','Elevación lateral sentado']},
     {id:'x7',n:'Deltoide posterior',t:'Cabeza posterior',s:3,o:['Reverse pec deck','Cruces invertidos en polea','Pájaros en banco inclinado','Face pull','Reverse fly unilateral en polea']},
     {id:'x8',n:'Tríceps',t:'Patrón contrario al del martes',s:2,sh:1,ss:2,o:['Extensión overhead en polea con cuerda','Push-down con cuerda','Push-down con barra recta o V','Push-down unilateral agarre inverso','Press francés con EZ acostado']},
-    {id:'x9',n:'Bíceps',t:'Un movimiento',s:2,sh:1,ss:2,o:['Preacher curl con EZ','Curl martillo','Curl inclinado con mancuernas','Curl inverso con EZ','Curl en polea detrás del cuerpo']}]}
+    {id:'x9',n:'Bíceps',t:'Un movimiento',s:2,sh:1,ss:2,o:['Preacher curl con EZ','Curl martillo','Curl martillo estricto','Curl inclinado con mancuernas','Curl inverso con EZ','Curl en polea detrás del cuerpo']}]}
 };
 
 const INFO={
@@ -371,6 +371,7 @@ const INFO={
  'Preacher curl en máquina':{i:'https://wger.de/media/exercise-images/193/Preacher-curl-3-1.png',d:'La versión con máquina del preacher. Resistencia pareja en todo el recorrido y cero balanceo.'},
  'Spider curl':{i:'',d:'Boca abajo sobre el respaldo de un banco inclinado, con los brazos colgando perpendiculares al suelo. Máxima tensión en la contracción y nada de impulso.'},
  'Curl martillo':{i:'https://wger.de/media/exercise-images/86/Bicep-hammer-curl-1.png',d:'Palmas enfrentadas todo el recorrido, como agarrando un martillo. Pega en el braquial, el músculo bajo el bíceps que empuja el pico hacia arriba.'},
+ 'Curl martillo estricto':{i:'https://wger.de/media/exercise-images/86/Bicep-hammer-curl-1.png',d:'El mismo agarre neutro, pero con la parte de atrás del brazo apoyada: banco predicador, arm blaster o un respaldo. El codo queda fijo y no hay balanceo, así que todo el peso lo mueven el braquial y el braquiorradial. Usa menos carga que en el martillo libre.'},
  'Curl inverso con EZ':{i:'https://wger.de/media/exercise-images/86/Bicep-hammer-curl-1.png',d:'Agarre pronado, palmas hacia abajo. Braquial y braquiorradial del antebrazo. Usa bastante menos peso del que crees.'},
  'Curl concentrado':{i:'',d:'Sentado, el codo apoyado en la cara interna del muslo. Aislamiento puro, imposible hacer trampa con la espalda.'},
 
@@ -716,7 +717,8 @@ function renderNotes(){
 
     '<h2>Largo y corto</h2>'+
     '<p>Cada día tiene dos versiones. <b>Largo</b> es el entrenamiento completo. <b>Corto</b> deja los compuestos con sus series intactas y recorta los aislamientos, apuntando a unos 40 minutos. La elección se guarda por día, así que puedes tener Push en corto y Piernas en largo al mismo tiempo.</p>'+
-    '<p>Lo que se recorta en corto no es al azar: se van los segundos ángulos de un mismo músculo y baja una serie en los aislamientos que recuperan rápido. Los compuestos grandes nunca pierden series, porque son los que sostienen la progresión.</p>'+
+    '<p>Lo que se recorta en corto no es al azar: se van los segundos ángulos de un mismo músculo y baja una serie en los aislamientos que recuperan rápido. Los compuestos que quedan no pierden series, porque son los que sostienen la progresión.</p>'+
+    '<p>En Push y Pull el corto prioriza el brazo. En Push sale el press vertical, porque el press inclinado y la apertura ya le dan estímulo al deltoide anterior, y entra un segundo ejercicio de brazo. En Pull sale el remo para dorsal, porque el remo de espalda alta, el jalón y el deltoide posterior ya cubren la espalda, y entra un segundo ejercicio de brazo. El brazo que entra es el que toca ese día según el reparto: en híbrido, bíceps en Push y tríceps en Pull; en normal, al revés.</p>'+
 
     '<h2>Híbrido y normal</h2>'+
     '<p>En <b>híbrido</b>, el bíceps va el lunes con Push y el tríceps el martes con Pull. Así cada brazo entra fresco, sin arrastrar la fatiga de los press ni de los remos.</p>'+
@@ -790,7 +792,10 @@ document.addEventListener('input',function(e){
   }
   L[k][f]=el.value.trim(); save();
   const sel=g('sel',day,id), h=sel?(S.hist[sel]||[]):[];
-  const D=delta(L[k], h.length?h[0].s[k]:null, sel?unitOf(sel):'kg');
+  /* misma unidad de origen que usa renderDay; sin ella una sesión anterior
+     en lb se leía como kg y el chip mostraba subidas o bajadas falsas */
+  const pu=h.length?(h[0].u||'kg'):'kg';
+  const D=delta(L[k], h.length?h[0].s[k]:null, sel?unitOf(sel):'kg', pu);
   const chip=document.querySelector('[data-d="'+id+'-'+k+'"]');
   if(chip){chip.className='delta '+D.c;chip.textContent=D.x;}
 });
