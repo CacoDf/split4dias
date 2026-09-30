@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Split 4 Días</title>
 <meta name="theme-color" content="#16130F">
-<meta name="app-version" content="2026.09.25-1">
+<meta name="app-version" content="2026.09.30-1">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -298,9 +298,9 @@ const DAYS = {
           n:'Reparto clásico: el bíceps cierra el día, ya cargado por remos y jalones. Dos series bien hechas bastan.'},ex:[
     {id:'u1',n:'Remo para dorsal',t:'Codo pegado al cuerpo',s:3,o:['Remo con mancuerna a un brazo','Remo en polea baja agarre neutro','Remo en máquina agarre neutro','Remo con barra agarre supino','Meadows row']},
     {id:'u2',n:'Remo espalda alta',t:'Codo abierto 45 a 90°',s:2,sh:1,o:['Remo en máquina agarre pronado ancho','Remo con mancuernas apoyado en banco','Remo en polea sentado con barra ancha','Remo en T agarre ancho','Seal row']},
-    {id:'u3',n:'Jalón para dorsal',t:'Agarre cerrado o neutro',s:2,o:['Lat pulldown agarre neutro estrecho','Dominadas supinas o neutras','Lat pulldown unilateral','Pullover en polea']},
-    {id:'u4',n:'Jalón espalda alta',t:'Codos abiertos',s:2,o:['Lat pulldown agarre pronado ancho','High row en máquina','Dominadas pronadas anchas','Lat pulldown con codos abiertos']},
-    {id:'u10',n:'Jalón',t:'Elige dorsal o espalda alta',s:2,sh:1,co:1,o:['Lat pulldown agarre neutro estrecho','Dominadas supinas o neutras','Lat pulldown unilateral','Pullover en polea','Lat pulldown agarre pronado ancho','High row en máquina','Dominadas pronadas anchas','Lat pulldown con codos abiertos']},
+    {id:'u3',n:'Jalón para dorsal',t:'Agarre cerrado o neutro',s:2,o:['Lat pulldown agarre neutro estrecho','Dominadas','Lat pulldown unilateral','Pullover en polea']},
+    {id:'u4',n:'Jalón espalda alta',t:'Codos abiertos',s:2,o:['Lat pulldown agarre neutro ancho','High row en máquina','Dominadas pronadas anchas','Lat pulldown con codos abiertos']},
+    {id:'u10',n:'Jalón',t:'Elige dorsal o espalda alta',s:2,sh:1,co:1,o:['Lat pulldown agarre neutro estrecho','Dominadas','Lat pulldown unilateral','Pullover en polea','Lat pulldown agarre neutro ancho','High row en máquina','Dominadas pronadas anchas','Lat pulldown con codos abiertos']},
     {id:'u5',n:'Deltoide posterior',t:'Cabeza posterior',s:3,sh:1,ss:2,o:['Reverse pec deck','Cruces invertidos en polea','Pájaros en banco inclinado','Face pull','Reverse fly unilateral en polea']},
     {id:'u6',n:'Extensión overhead',t:'Cabeza larga del tríceps',s:2,sh:1,only:'h',o:['Extensión overhead en polea con cuerda','Extensión overhead con mancuerna sentado','Press francés con EZ acostado','Extensión overhead en máquina','Extensión overhead unilateral en polea']},
     {id:'u7',n:'Push-down',t:'Cabeza lateral y medial',s:2,sh:1,only:'h',o:['Push-down con cuerda','Push-down con barra recta o V','Push-down unilateral agarre inverso','Fondos en máquina','Press cerrado en Smith']},
@@ -325,7 +325,7 @@ const DAYS = {
           n:'Regla del día: cada movimiento va con una variante distinta a la del lunes y el martes. Las repetidas aparecen marcadas.'},ex:[
     {id:'x1',n:'Press de pecho',t:'Prioriza inclinado sobre plano',s:2,sh:1,o:['Press inclinado en Hammer','Press inclinado con mancuernas','Press inclinado en Smith','Chest press en máquina','Dips','Press banca con barra']},
     {id:'x2',n:'Apertura',t:'Ángulo distinto al lunes',s:2,o:['Pec deck','Cruces en polea de alto a bajo','Cruces en polea de bajo a alto','Aperturas con mancuernas en inclinado','Cruces en polea a la altura del pecho']},
-    {id:'x3',n:'Jalón',t:'Variante distinta al martes',s:2,sh:1,o:['Lat pulldown agarre neutro estrecho','Lat pulldown agarre pronado ancho','Lat pulldown unilateral','Pullover en polea','Dominadas supinas o neutras']},
+    {id:'x3',n:'Jalón',t:'Variante distinta al martes',s:2,sh:1,o:['Lat pulldown agarre neutro estrecho','Lat pulldown agarre neutro ancho','Lat pulldown unilateral','Pullover en polea','Dominadas']},
     {id:'x4',n:'Remo',t:'Variante distinta al martes',s:2,sh:1,o:['Remo con mancuerna a un brazo','Remo en polea baja agarre neutro','Remo en máquina agarre pronado ancho','Remo con mancuernas apoyado en banco','Remo en T agarre ancho']},
     {id:'x5',n:'Press vertical o frontal',t:'Opcional según el tiempo',s:2,o:['Press de hombro en máquina','Elevación frontal en polea','Press militar con mancuernas']},
     {id:'x6',n:'Elevación lateral',t:'Deltoide medio',s:3,sh:1,ss:2,o:['Elevación lateral en polea','Elevación lateral con mancuernas','Elevación lateral en máquina','Elevación lateral sentado']},
@@ -388,11 +388,11 @@ const INFO={
  'Seal row':{i:'',d:'Tumbado boca abajo en un banco alto, con el pecho fijo y los brazos colgando libres. Aísla la espalda por completo: no hay forma de impulsar.'},
 
  'Lat pulldown agarre neutro estrecho':{i:'',d:'Sentado bajo la polea alta, agarre estrecho con las palmas enfrentadas. El codo baja pegado al torso y estira el dorsal en largo.'},
- 'Dominadas supinas o neutras':{i:'',d:'Colgado de la barra con palmas hacia ti o enfrentadas. Anota el peso del cinturón; si vas a cuerpo libre deja 0 y progresa por repeticiones.'},
+ 'Dominadas':{i:'',d:'Colgado de la barra, subes hasta pasar la barbilla. Usa el agarre que te acomode ese día. Anota el peso del cinturón; si vas a cuerpo libre deja 0 y progresa por repeticiones.'},
  'Lat pulldown unilateral':{i:'',d:'Un brazo por vez con agarre simple. Permite más rango y corrige diferencias entre lados.'},
  'Pullover en polea':{i:'',d:'De pie frente a la polea alta, brazos casi rectos, llevas la barra desde arriba hasta los muslos en arco. Aísla el dorsal sin que entre el bíceps.'},
 
- 'Lat pulldown agarre pronado ancho':{i:'',d:'Manos anchas, palmas hacia adelante, tiras al pecho alto. Los codos abiertos cargan la espalda alta más que el dorsal.'},
+ 'Lat pulldown agarre neutro ancho':{i:'',d:'Barra ancha con asas paralelas: manos separadas y palmas enfrentadas, tiras al pecho alto. Es más amable con el hombro que el agarre pronado y reparte el trabajo entre dorsal y espalda alta.'},
  'High row en máquina':{i:'',d:'Máquina donde tiras desde arriba hacia abajo y atrás, con el pecho apoyado. Vector diagonal entre el jalón y el remo.'},
  'Dominadas pronadas anchas':{i:'',d:'Colgado con las palmas hacia adelante y las manos anchas. La versión más dura, muy centrada en espalda alta.'},
  'Lat pulldown con codos abiertos':{i:'',d:'Agarre medio pero llevando los codos hacia afuera en vez de pegados. Traslada el trabajo del dorsal al trapecio medio.'},
@@ -509,7 +509,36 @@ async function load(){
   ['sel','done','last','log','hist','mode','unit'].forEach(k=>{S[k]=S[k]||{}});
   if(S.split!=='h'&&S.split!=='n') S.split='h';
   migrateDrops();
+  if(migrateNames()) save();
   render();
+}
+
+/* Variantes renombradas. El historial se guarda por nombre, así que al
+   renombrar hay que mover los registros o quedan huérfanos. */
+const RENAMES={
+  'Lat pulldown agarre pronado ancho':'Lat pulldown agarre neutro ancho',
+  'Dominadas supinas o neutras':'Dominadas'
+};
+function migrateNames(){
+  let cambio=false;
+  Object.keys(RENAMES).forEach(function(viejo){
+    const nuevo=RENAMES[viejo];
+    if(S.hist[viejo]){
+      S.hist[nuevo]=(S.hist[nuevo]||[]).concat(S.hist[viejo]).slice(0,12);
+      delete S.hist[viejo];cambio=true;
+    }
+    if(S.unit[viejo]){
+      if(!S.unit[nuevo]) S.unit[nuevo]=S.unit[viejo];
+      delete S.unit[viejo];cambio=true;
+    }
+    ['sel','last'].forEach(function(k){
+      Object.values(S[k]||{}).forEach(function(d){
+        if(!d) return;
+        Object.keys(d).forEach(function(id){if(d[id]===viejo){d[id]=nuevo;cambio=true;}});
+      });
+    });
+  });
+  return cambio;
 }
 
 /* El dropset era uno solo (ds/dw/dr). Ahora es una lista d:[{w,r},...].
