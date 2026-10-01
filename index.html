@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>VANDAL</title>
 <meta name="theme-color" content="#0B0B0C">
-<meta name="app-version" content="2026.09.30-14">
+<meta name="app-version" content="2026.09.30-15">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -831,12 +831,11 @@ function progreso(v,U){
 }
 
 /* ---- Descanso ----
-   Compuestos 3:00, aislamientos 2:30. Solo arranca con el botón Descanso de la ficha.
+   3:00 para todo (el usuario decide si saltarlo). Solo arranca con el botón Descanso de la ficha.
    Se guarda la hora de término, no un contador: si la pantalla se apaga, al volver sigue bien.
    Una app web no puede sonar con el iPhone bloqueado, así que con la alarma activada el botón
    además corre el atajo "Descanso VANDAL", que pone el temporizador del Reloj (ese sí suena). */
-const COMP=new Set(['p1','p2','p4','u1','u2','u3','u4','u10','l1','l3','x1','x3','x4','x5']);
-const restOf=id=>COMP.has(id)?180:150;
+const restOf=()=>180;
 const ATAJO='Descanso VANDAL';
 function alarmaIphone(sec){
   location.href='shortcuts://run-shortcut?name='+encodeURIComponent(ATAJO)+'&input=text&text='+sec;
@@ -1138,7 +1137,7 @@ function renderNotes(){
     '<h2>Créditos</h2>'+
     '<p>Animaciones de los ejercicios: © Gym visual (gymvisual.com), vía exercises-dataset; pendulum squat: © Fitness Programer (fitnessprogramer.com). Ilustraciones de respaldo: wger.de, con licencia CC BY-SA.</p>'+
     '<h2>Alarma de descanso</h2>'+
-    '<p>El botón <b>Descanso</b> de cada ficha cuenta <b>3:00</b> en los compuestos y <b>2:30</b> en los aislamientos. Una app web no puede sonar con el teléfono bloqueado, así que la alarma la pone el <b>temporizador del Reloj</b> del iPhone, que suena aunque esté en silencio.</p>'+
+    '<p>El botón <b>Descanso</b> de cada ficha cuenta <b>3:00</b> en todos los ejercicios. Si quieres cortarlo antes, toca <b>Saltar</b>. Una app web no puede sonar con el teléfono bloqueado, así que la alarma la pone el <b>temporizador del Reloj</b> del iPhone, que suena aunque esté en silencio.</p>'+
     '<div class="seg alarmseg">'+
       '<button class="'+(S.alarm?'on':'')+'" data-alarm="on">Alarma del iPhone</button>'+
       '<button class="'+(S.alarm?'':'on')+'" data-alarm="off">Solo en la app</button>'+
