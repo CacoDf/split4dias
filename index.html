@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>VANDAL</title>
 <meta name="theme-color" content="#0B0B0C">
-<meta name="app-version" content="2026.09.30-10">
+<meta name="app-version" content="2026.09.30-11">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -209,7 +209,7 @@
   .guide::before,.guide::after{content:'';position:absolute;bottom:6px;width:7px;height:7px;border-radius:50%;
        background:#A69A83}
   .guide::before{left:6px} .guide::after{right:6px}
-  .guide img{flex:none;width:96px;height:auto;align-self:flex-start;border-radius:3px;background:#fff;padding:4px;border:1px solid var(--alu-rule)}
+  .guide img{flex:none;width:120px;height:auto;align-self:flex-start;border-radius:3px;background:#fff;padding:4px;border:1px solid var(--alu-rule)}
   .gtx{flex:1;min-width:0}
   .guide p{font-size:14px;line-height:1.45;color:#1E1B17;margin-bottom:10px}
   .vid{display:inline-flex;align-items:center;gap:7px;min-height:40px;padding:8px 13px 8px 11px;border-radius:4px;
@@ -217,7 +217,8 @@
        font-family:var(--ft);font-weight:800;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase}
   .vid .ico{width:15px;height:15px}
   .cred{font-size:11.5px;color:#5A5143;margin:9px 0 0}
-  @media(max-width:400px){.guide .gb{flex-direction:column}.guide img{width:100%;max-width:150px}}
+  .cred a{color:inherit}
+  @media(max-width:400px){.guide .gb{flex-direction:column}.guide img{width:100%;max-width:180px}}
 
   /* ---- Registro de series ---- */
   .log{margin-top:14px;padding-top:14px;border-top:1px dashed var(--rule)}
@@ -390,7 +391,7 @@ const DAYS = {
     {id:'u8',n:'Curl cabeza larga',t:'Brazo detrás del cuerpo',s:2,sh:1,only:'n',o:['Curl inclinado con mancuernas','Curl en polea detrás del cuerpo','Curl con EZ codos atrás','Curl martillo','Curl martillo estricto']},
     {id:'u9',n:'Curl cabeza corta',t:'Braquial y pico',s:2,sh:1,only:'n',o:['Preacher curl con EZ','Preacher curl en máquina','Spider curl','Curl martillo','Curl martillo estricto','Curl inverso con EZ','Curl concentrado']}]},
 
-  legs:{label:'Piernas',day:'Miércoles',color:'var(--legs)',title:'PIERNAS',
+  legs:{label:'Legs',day:'Miércoles',color:'var(--legs)',title:'LEGS',
     sub:{h:'Tu rutina de piernas + abdomen',n:'Tu rutina de piernas + abdomen'},
     note:{h:'Simplificado a lo que haces de verdad. El deadlift está dentro de la bisagra de cadera para las veces que lo metes.',
           n:'Simplificado a lo que haces de verdad. El deadlift está dentro de la bisagra de cadera para las veces que lo metes.'},ex:[
@@ -417,137 +418,145 @@ const DAYS = {
     {id:'x9',n:'Bíceps',t:'Un movimiento',s:2,sh:1,ss:2,o:['Preacher curl con EZ','Curl martillo','Curl martillo estricto','Curl inclinado con mancuernas','Curl inverso con EZ','Curl en polea detrás del cuerpo']}]}
 };
 
+// Animaciones © Gym visual, enlazadas (no copiadas) desde hasaneyldrm/exercises-dataset en un commit fijo
+const GV='https://cdn.jsdelivr.net/gh/hasaneyldrm/exercises-dataset@7455efae41b330c265e7cd4b78dfa848e7ce5ebd/';
+function gifFail(img){
+  const alt=img.dataset.alt, c=img.parentNode.querySelector('.cred');
+  if(!alt) return img.remove();
+  img.onerror=()=>img.remove(); img.src=alt;
+  if(c) c.textContent='Ilustración: wger.de · CC BY-SA';
+}
 const INFO={
- 'Press inclinado con mancuernas':{i:'https://wger.de/media/exercise-images/41/Incline-bench-press-1.png',d:'Banco a 30–45°. Bajas las mancuernas a los lados del pecho alto y empujas arriba y ligeramente adentro. El ángulo carga la parte clavicular del pectoral.'},
- 'Press inclinado en Hammer':{i:'https://wger.de/media/exercise-images/41/Incline-bench-press-1.png',d:'La máquina de discos con agarres independientes. Mismo ángulo que el banco inclinado, pero guiado: puedes ir más al fallo sin spotter.'},
- 'Press inclinado en Smith':{i:'https://wger.de/media/exercise-images/41/Incline-bench-press-1.png',d:'Barra guiada en rieles, banco inclinado debajo. Al ser fija, te deja concentrarte en el pecho sin estabilizar.'},
- 'Press inclinado con barra':{i:'https://wger.de/media/exercise-images/41/Incline-bench-press-1.png',d:'Barra libre en banco inclinado. La más pesada del grupo, pero pide técnica y ojalá alguien que te cuide la última serie.'},
+ 'Press inclinado con mancuernas':{g:'videos/0314-ns0SIbU.gif',i:'https://wger.de/media/exercise-images/41/Incline-bench-press-1.png',d:'Banco a 30–45°. Bajas las mancuernas a los lados del pecho alto y empujas arriba y ligeramente adentro. El ángulo carga la parte clavicular del pectoral.'},
+ 'Press inclinado en Hammer':{g:'videos/1299-jHAnWmT.gif',i:'https://wger.de/media/exercise-images/41/Incline-bench-press-1.png',d:'La máquina de discos con agarres independientes. Mismo ángulo que el banco inclinado, pero guiado: puedes ir más al fallo sin spotter.'},
+ 'Press inclinado en Smith':{g:'videos/0757-5v7KYld.gif',i:'https://wger.de/media/exercise-images/41/Incline-bench-press-1.png',d:'Barra guiada en rieles, banco inclinado debajo. Al ser fija, te deja concentrarte en el pecho sin estabilizar.'},
+ 'Press inclinado con barra':{g:'videos/0047-3TZduzM.gif',i:'https://wger.de/media/exercise-images/41/Incline-bench-press-1.png',d:'Barra libre en banco inclinado. La más pesada del grupo, pero pide técnica y ojalá alguien que te cuide la última serie.'},
 
- 'Press plano con mancuernas':{i:'https://wger.de/media/exercise-images/192/Bench-press-1.png',d:'Banco horizontal. Recorrido más largo que la barra porque las manos bajan más allá del torso, y cada lado trabaja solo.'},
- 'Press plano en Smith':{i:'https://wger.de/media/exercise-images/192/Bench-press-1.png',d:'Barra guiada en rieles sobre banco horizontal. Trayectoria fija, así que puedes empujar fuerte sin preocuparte de estabilizar.'},
- 'Chest press en máquina':{i:'https://wger.de/media/exercise-images/192/Bench-press-1.png',d:'Máquina sentado con empuje horizontal. La opción segura para llevar al fallo real sin riesgo.'},
- 'Dips':{i:'',d:'Cuerpo suspendido entre dos barras paralelas. Inclínate hacia adelante para cargar pecho en vez de tríceps. Anota solo el peso del cinturón.'},
- 'Press banca con barra':{i:'https://wger.de/media/exercise-images/192/Bench-press-1.png',d:'El press clásico acostado. Quédate en RIR 1 con técnica intacta; el fallo real déjalo para máquinas.'},
+ 'Press plano con mancuernas':{g:'videos/0289-SpYC0Kp.gif',i:'https://wger.de/media/exercise-images/192/Bench-press-1.png',d:'Banco horizontal. Recorrido más largo que la barra porque las manos bajan más allá del torso, y cada lado trabaja solo.'},
+ 'Press plano en Smith':{g:'videos/0748-trqKQv2.gif',i:'https://wger.de/media/exercise-images/192/Bench-press-1.png',d:'Barra guiada en rieles sobre banco horizontal. Trayectoria fija, así que puedes empujar fuerte sin preocuparte de estabilizar.'},
+ 'Chest press en máquina':{g:'videos/0577-T0yTjgW.gif',i:'https://wger.de/media/exercise-images/192/Bench-press-1.png',d:'Máquina sentado con empuje horizontal. La opción segura para llevar al fallo real sin riesgo.'},
+ 'Dips':{g:'videos/0251-9WTm7dq.gif',i:'',d:'Cuerpo suspendido entre dos barras paralelas. Inclínate hacia adelante para cargar pecho en vez de tríceps. Anota solo el peso del cinturón.'},
+ 'Press banca con barra':{g:'videos/0025-EIeI8Vf.gif',i:'https://wger.de/media/exercise-images/192/Bench-press-1.png',d:'El press clásico acostado. Quédate en RIR 1 con técnica intacta; el fallo real déjalo para máquinas.'},
 
- 'Pec deck':{i:'https://wger.de/media/exercise-images/98/Butterfly-machine-2.png',d:'La máquina de mariposa. Sentado, juntas los brazos al frente en arco con el codo semi-fijo. Aísla el pectoral sin que entre el tríceps.'},
- 'Cruces en polea a la altura del pecho':{i:'https://wger.de/media/exercise-images/71/Cable-crossover-2.png',d:'Poleas a la altura de los hombros. Juntas las manos al frente del esternón. El vector horizontal pega en la zona media del pecho.'},
- 'Cruces en polea de alto a bajo':{i:'https://wger.de/media/exercise-images/71/Cable-crossover-2.png',d:'Poleas arriba, cruzas las manos hacia abajo y adentro, a la altura del ombligo. Enfatiza la porción inferior del pectoral.'},
- 'Cruces en polea de bajo a alto':{i:'https://wger.de/media/exercise-images/71/Cable-crossover-2.png',d:'Poleas abajo, subes las manos al frente hasta la altura de la cara. Enfatiza la porción superior, la misma que el inclinado.'},
- 'Aperturas con mancuernas en inclinado':{i:'https://wger.de/media/exercise-images/122/Incline-cable-flyes-1.png',d:'Banco inclinado, codos semi-fijos, abres en arco hasta sentir el estiramiento y vuelves. Es donde el pecho más se estira bajo carga.'},
+ 'Pec deck':{g:'videos/0596-v3xmPAR.gif',i:'https://wger.de/media/exercise-images/98/Butterfly-machine-2.png',d:'La máquina de mariposa. Sentado, juntas los brazos al frente en arco con el codo semi-fijo. Aísla el pectoral sin que entre el tríceps.'},
+ 'Cruces en polea a la altura del pecho':{g:'videos/0188-xLYSdtg.gif',i:'https://wger.de/media/exercise-images/71/Cable-crossover-2.png',d:'Poleas a la altura de los hombros. Juntas las manos al frente del esternón. El vector horizontal pega en la zona media del pecho.'},
+ 'Cruces en polea de alto a bajo':{g:'videos/0227-Pr9Rhf4.gif',i:'https://wger.de/media/exercise-images/71/Cable-crossover-2.png',d:'Poleas arriba, cruzas las manos hacia abajo y adentro, a la altura del ombligo. Enfatiza la porción inferior del pectoral.'},
+ 'Cruces en polea de bajo a alto':{g:'videos/0179-FVmZVhk.gif',i:'https://wger.de/media/exercise-images/71/Cable-crossover-2.png',d:'Poleas abajo, subes las manos al frente hasta la altura de la cara. Enfatiza la porción superior, la misma que el inclinado.'},
+ 'Aperturas con mancuernas en inclinado':{g:'videos/0319-ESOd5Pl.gif',i:'https://wger.de/media/exercise-images/122/Incline-cable-flyes-1.png',d:'Banco inclinado, codos semi-fijos, abres en arco hasta sentir el estiramiento y vuelves. Es donde el pecho más se estira bajo carga.'},
 
- 'Press militar con mancuernas':{i:'https://wger.de/media/exercise-images/123/dumbbell-shoulder-press-large-1.png',d:'Sentado con respaldo, empujas desde los hombros hasta arriba. Las mancuernas permiten una trayectoria más natural que la barra.'},
- 'Press militar con barra':{i:'https://wger.de/media/exercise-images/123/dumbbell-shoulder-press-large-1.png',d:'Barra desde los hombros hasta sobre la cabeza. Aprieta glúteo y abdomen para no arquear la espalda baja.'},
- 'Press de hombro en máquina':{i:'https://wger.de/media/exercise-images/123/dumbbell-shoulder-press-large-1.png',d:'Empuje vertical guiado. Ideal cuando el hombro viene cansado del press de pecho y quieres control total.'},
- 'Press militar en Smith':{i:'https://wger.de/media/exercise-images/123/dumbbell-shoulder-press-large-1.png',d:'Barra en rieles, sentado debajo. Trayectoria fija, sin estabilización, bueno para las series finales.'},
- 'Arnold press':{i:'https://wger.de/media/exercise-images/123/dumbbell-shoulder-press-large-1.png',d:'Partes con las palmas mirándote y rotas hacia afuera mientras subes. Suma algo de deltoide anterior por la rotación.'},
+ 'Press militar con mancuernas':{g:'videos/0405-znQUdHY.gif',i:'https://wger.de/media/exercise-images/123/dumbbell-shoulder-press-large-1.png',d:'Sentado con respaldo, empujas desde los hombros hasta arriba. Las mancuernas permiten una trayectoria más natural que la barra.'},
+ 'Press militar con barra':{g:'videos/0091-kTbSH9h.gif',i:'https://wger.de/media/exercise-images/123/dumbbell-shoulder-press-large-1.png',d:'Barra desde los hombros hasta sobre la cabeza. Aprieta glúteo y abdomen para no arquear la espalda baja.'},
+ 'Press de hombro en máquina':{g:'videos/0603-67n3r98.gif',i:'https://wger.de/media/exercise-images/123/dumbbell-shoulder-press-large-1.png',d:'Empuje vertical guiado. Ideal cuando el hombro viene cansado del press de pecho y quieres control total.'},
+ 'Press militar en Smith':{g:'videos/0765-xUwnBMT.gif',i:'https://wger.de/media/exercise-images/123/dumbbell-shoulder-press-large-1.png',d:'Barra en rieles, sentado debajo. Trayectoria fija, sin estabilización, bueno para las series finales.'},
+ 'Arnold press':{g:'videos/2137-Xy4jlWA.gif',i:'https://wger.de/media/exercise-images/123/dumbbell-shoulder-press-large-1.png',d:'Partes con las palmas mirándote y rotas hacia afuera mientras subes. Suma algo de deltoide anterior por la rotación.'},
 
- 'Elevación lateral en polea':{i:'https://wger.de/media/exercise-images/148/lateral-dumbbell-raises-large-2.png',d:'Un brazo por vez, polea baja cruzada por delante del cuerpo. La polea mantiene tensión constante incluso abajo, donde la mancuerna la pierde.'},
- 'Elevación lateral con mancuernas':{i:'https://wger.de/media/exercise-images/148/lateral-dumbbell-raises-large-2.png',d:'De pie, subes los brazos a los lados hasta la altura del hombro. Codo levemente flexionado y sin impulso de cadera.'},
- 'Elevación lateral en máquina':{i:'https://wger.de/media/exercise-images/148/lateral-dumbbell-raises-large-2.png',d:'Sentado con los brazos apoyados en las almohadillas. Elimina el balanceo, así que es la más fácil de llevar al fallo limpio.'},
- 'Elevación lateral sentado':{i:'https://wger.de/media/exercise-images/148/lateral-dumbbell-raises-large-2.png',d:'Igual que de pie pero sentado en un banco. Al no poder impulsar con las piernas, el deltoide medio hace todo el trabajo.'},
+ 'Elevación lateral en polea':{g:'videos/0192-wEulIzp.gif',i:'https://wger.de/media/exercise-images/148/lateral-dumbbell-raises-large-2.png',d:'Un brazo por vez, polea baja cruzada por delante del cuerpo. La polea mantiene tensión constante incluso abajo, donde la mancuerna la pierde.'},
+ 'Elevación lateral con mancuernas':{g:'videos/0334-DsgkuIt.gif',i:'https://wger.de/media/exercise-images/148/lateral-dumbbell-raises-large-2.png',d:'De pie, subes los brazos a los lados hasta la altura del hombro. Codo levemente flexionado y sin impulso de cadera.'},
+ 'Elevación lateral en máquina':{g:'videos/0584-dRTfGZT.gif',i:'https://wger.de/media/exercise-images/148/lateral-dumbbell-raises-large-2.png',d:'Sentado con los brazos apoyados en las almohadillas. Elimina el balanceo, así que es la más fácil de llevar al fallo limpio.'},
+ 'Elevación lateral sentado':{g:'videos/0396-hxyTtWj.gif',i:'https://wger.de/media/exercise-images/148/lateral-dumbbell-raises-large-2.png',d:'Igual que de pie pero sentado en un banco. Al no poder impulsar con las piernas, el deltoide medio hace todo el trabajo.'},
 
- 'Curl inclinado con mancuernas':{i:'',d:'Banco inclinado con los brazos colgando atrás del torso. Esa posición estira la cabeza larga del bíceps, que es la que buscas hoy.'},
+ 'Curl inclinado con mancuernas':{g:'videos/0318-ae9UoXQ.gif',i:'',d:'Banco inclinado con los brazos colgando atrás del torso. Esa posición estira la cabeza larga del bíceps, que es la que buscas hoy.'},
  'Curl en polea detrás del cuerpo':{i:'',d:'De pie, un paso adelante de la polea baja, con el brazo quedando detrás del cuerpo. Mismo estiramiento que el inclinado, con tensión constante.'},
- 'Curl con EZ codos atrás':{i:'',d:'De pie con la barra EZ, llevando los codos ligeramente detrás del torso y sin dejarlos avanzar. Versión de pie del mismo estímulo.'},
+ 'Curl con EZ codos atrás':{g:'videos/0038-IENzBdA.gif',i:'',d:'De pie con la barra EZ, llevando los codos ligeramente detrás del torso y sin dejarlos avanzar. Versión de pie del mismo estímulo.'},
 
- 'Preacher curl con EZ':{i:'https://wger.de/media/exercise-images/193/Preacher-curl-3-1.png',d:'Brazo apoyado en la almohadilla inclinada, barra EZ. El codo queda por delante del cuerpo, lo que carga la cabeza corta del bíceps.'},
- 'Preacher curl en máquina':{i:'https://wger.de/media/exercise-images/193/Preacher-curl-3-1.png',d:'La versión con máquina del preacher. Resistencia pareja en todo el recorrido y cero balanceo.'},
- 'Spider curl':{i:'',d:'Boca abajo sobre el respaldo de un banco inclinado, con los brazos colgando perpendiculares al suelo. Máxima tensión en la contracción y nada de impulso.'},
- 'Curl martillo':{i:'https://wger.de/media/exercise-images/86/Bicep-hammer-curl-1.png',d:'Palmas enfrentadas todo el recorrido, como agarrando un martillo. Pega en el braquial, el músculo bajo el bíceps que empuja el pico hacia arriba.'},
- 'Curl martillo estricto':{i:'https://wger.de/media/exercise-images/86/Bicep-hammer-curl-1.png',d:'El mismo agarre neutro, pero con la parte de atrás del brazo apoyada: banco predicador, arm blaster o un respaldo. El codo queda fijo y no hay balanceo, así que todo el peso lo mueven el braquial y el braquiorradial. Usa menos carga que en el martillo libre.'},
- 'Curl inverso con EZ':{i:'https://wger.de/media/exercise-images/86/Bicep-hammer-curl-1.png',d:'Agarre pronado, palmas hacia abajo. Braquial y braquiorradial del antebrazo. Usa bastante menos peso del que crees.'},
- 'Curl concentrado':{i:'',d:'Sentado, el codo apoyado en la cara interna del muslo. Aislamiento puro, imposible hacer trampa con la espalda.'},
+ 'Preacher curl con EZ':{g:'videos/1627-hacCyUv.gif',i:'https://wger.de/media/exercise-images/193/Preacher-curl-3-1.png',d:'Brazo apoyado en la almohadilla inclinada, barra EZ. El codo queda por delante del cuerpo, lo que carga la cabeza corta del bíceps.'},
+ 'Preacher curl en máquina':{g:'videos/0592-b6hQYMb.gif',i:'https://wger.de/media/exercise-images/193/Preacher-curl-3-1.png',d:'La versión con máquina del preacher. Resistencia pareja en todo el recorrido y cero balanceo.'},
+ 'Spider curl':{g:'videos/0454-Ye5Qxb0.gif',i:'',d:'Boca abajo sobre el respaldo de un banco inclinado, con los brazos colgando perpendiculares al suelo. Máxima tensión en la contracción y nada de impulso.'},
+ 'Curl martillo':{g:'videos/0313-slDvUAU.gif',i:'https://wger.de/media/exercise-images/86/Bicep-hammer-curl-1.png',d:'Palmas enfrentadas todo el recorrido, como agarrando un martillo. Pega en el braquial, el músculo bajo el bíceps que empuja el pico hacia arriba.'},
+ 'Curl martillo estricto':{g:'videos/1663-4dF3maG.gif',i:'https://wger.de/media/exercise-images/86/Bicep-hammer-curl-1.png',d:'El mismo agarre neutro, pero con la parte de atrás del brazo apoyada: banco predicador, arm blaster o un respaldo. El codo queda fijo y no hay balanceo, así que todo el peso lo mueven el braquial y el braquiorradial. Usa menos carga que en el martillo libre.'},
+ 'Curl inverso con EZ':{g:'videos/0080-xNrS20v.gif',i:'https://wger.de/media/exercise-images/86/Bicep-hammer-curl-1.png',d:'Agarre pronado, palmas hacia abajo. Braquial y braquiorradial del antebrazo. Usa bastante menos peso del que crees.'},
+ 'Curl concentrado':{g:'videos/0297-gvsWLQw.gif',i:'',d:'Sentado, el codo apoyado en la cara interna del muslo. Aislamiento puro, imposible hacer trampa con la espalda.'},
 
- 'Remo con mancuerna a un brazo':{i:'https://wger.de/media/exercise-images/1283/e7262f70-7512-408a-8d00-4c499ef632fc.jpg',d:'Una rodilla y una mano en el banco, la otra mano tira la mancuerna hacia la cadera. El codo va pegado al cuerpo para que trabaje el dorsal.'},
- 'Remo en polea baja agarre neutro':{i:'https://wger.de/media/exercise-images/143/Cable-seated-rows-2.png',d:'Sentado frente a la polea baja con el triángulo. Tiras hacia el ombligo con los codos rozando las costillas.'},
- 'Remo en máquina agarre neutro':{i:'',d:'Máquina con el pecho apoyado, agarres verticales. El apoyo elimina la espalda baja de la ecuación.'},
- 'Remo con barra agarre supino':{i:'https://wger.de/media/exercise-images/110/Reverse-grip-bent-over-rows-1.png',d:'Torso inclinado, palmas hacia arriba. El agarre supino mete el codo al cuerpo y carga bien el dorsal, con algo de bíceps de regalo.'},
+ 'Remo con mancuerna a un brazo':{g:'videos/0292-C0MA9bC.gif',i:'https://wger.de/media/exercise-images/1283/e7262f70-7512-408a-8d00-4c499ef632fc.jpg',d:'Una rodilla y una mano en el banco, la otra mano tira la mancuerna hacia la cadera. El codo va pegado al cuerpo para que trabaje el dorsal.'},
+ 'Remo en polea baja agarre neutro':{g:'videos/0861-fUBheHs.gif',i:'https://wger.de/media/exercise-images/143/Cable-seated-rows-2.png',d:'Sentado frente a la polea baja con el triángulo. Tiras hacia el ombligo con los codos rozando las costillas.'},
+ 'Remo en máquina agarre neutro':{g:'videos/0588-IGjKj1v.gif',i:'',d:'Máquina con el pecho apoyado, agarres verticales. El apoyo elimina la espalda baja de la ecuación.'},
+ 'Remo con barra agarre supino':{g:'videos/0118-SzX3uzM.gif',i:'https://wger.de/media/exercise-images/110/Reverse-grip-bent-over-rows-1.png',d:'Torso inclinado, palmas hacia arriba. El agarre supino mete el codo al cuerpo y carga bien el dorsal, con algo de bíceps de regalo.'},
  'Meadows row':{i:'https://wger.de/media/exercise-images/1283/e7262f70-7512-408a-8d00-4c499ef632fc.jpg',d:'Remo a un brazo con el extremo de una barra encajada en una esquina, de costado. El ángulo cambia la resistencia a lo largo del recorrido.'},
 
- 'Remo en máquina agarre pronado ancho':{i:'',d:'Pecho apoyado, manos anchas y palmas hacia abajo. El codo sale abierto y pega en trapecio medio y romboides.'},
- 'Remo con mancuernas apoyado en banco':{i:'',d:'Chest-supported: tumbado boca abajo en un banco inclinado, remas con las dos mancuernas. Cero trampa con la cadera.'},
- 'Remo en polea sentado con barra ancha':{i:'https://wger.de/media/exercise-images/143/Cable-seated-rows-2.png',d:'Igual que el remo en polea pero con barra larga y agarre ancho, tirando hacia el pecho en vez del ombligo.'},
- 'Remo en T agarre ancho':{i:'https://wger.de/media/exercise-images/110/Reverse-grip-bent-over-rows-1.png',d:'Barra en T con agarre ancho y torso inclinado. Permite bastante carga con la espalda alta como protagonista.'},
- 'Seal row':{i:'',d:'Tumbado boca abajo en un banco alto, con el pecho fijo y los brazos colgando libres. Aísla la espalda por completo: no hay forma de impulsar.'},
+ 'Remo en máquina agarre pronado ancho':{g:'videos/1350-7I6LNUG.gif',i:'',d:'Pecho apoyado, manos anchas y palmas hacia abajo. El codo sale abierto y pega en trapecio medio y romboides.'},
+ 'Remo con mancuernas apoyado en banco':{g:'videos/0327-7vG5o25.gif',i:'',d:'Chest-supported: tumbado boca abajo en un banco inclinado, remas con las dos mancuernas. Cero trampa con la cadera.'},
+ 'Remo en polea sentado con barra ancha':{g:'videos/0218-qcY50ZD.gif',i:'https://wger.de/media/exercise-images/143/Cable-seated-rows-2.png',d:'Igual que el remo en polea pero con barra larga y agarre ancho, tirando hacia el pecho en vez del ombligo.'},
+ 'Remo en T agarre ancho':{g:'videos/0606-aaXr7ld.gif',i:'https://wger.de/media/exercise-images/110/Reverse-grip-bent-over-rows-1.png',d:'Barra en T con agarre ancho y torso inclinado. Permite bastante carga con la espalda alta como protagonista.'},
+ 'Seal row':{g:'videos/0248-R5swFnc.gif',i:'',d:'Tumbado boca abajo en un banco alto, con el pecho fijo y los brazos colgando libres. Aísla la espalda por completo: no hay forma de impulsar.'},
 
- 'Lat pulldown agarre neutro estrecho':{i:'',d:'Sentado bajo la polea alta, agarre estrecho con las palmas enfrentadas. El codo baja pegado al torso y estira el dorsal en largo.'},
- 'Dominadas':{i:'',d:'Colgado de la barra, subes hasta pasar la barbilla. Usa el agarre que te acomode ese día. Anota el peso del cinturón; si vas a cuerpo libre deja 0 y progresa por repeticiones.'},
- 'Lat pulldown unilateral':{i:'',d:'Un brazo por vez con agarre simple. Permite más rango y corrige diferencias entre lados.'},
- 'Pullover en polea':{i:'',d:'De pie frente a la polea alta, brazos casi rectos, llevas la barra desde arriba hasta los muslos en arco. Aísla el dorsal sin que entre el bíceps.'},
+ 'Lat pulldown agarre neutro estrecho':{g:'videos/2616-4c9BhzB.gif',i:'',d:'Sentado bajo la polea alta, agarre estrecho con las palmas enfrentadas. El codo baja pegado al torso y estira el dorsal en largo.'},
+ 'Dominadas':{g:'videos/0652-lBDjFxJ.gif',i:'',d:'Colgado de la barra, subes hasta pasar la barbilla. Usa el agarre que te acomode ese día. Anota el peso del cinturón; si vas a cuerpo libre deja 0 y progresa por repeticiones.'},
+ 'Lat pulldown unilateral':{g:'videos/3563-U5INZY6.gif',i:'',d:'Un brazo por vez con agarre simple. Permite más rango y corrige diferencias entre lados.'},
+ 'Pullover en polea':{g:'videos/0238-x69MAlq.gif',i:'',d:'De pie frente a la polea alta, brazos casi rectos, llevas la barra desde arriba hasta los muslos en arco. Aísla el dorsal sin que entre el bíceps.'},
 
- 'Lat pulldown agarre neutro ancho':{i:'',d:'Barra ancha con asas paralelas: manos separadas y palmas enfrentadas, tiras al pecho alto. Es más amable con el hombro que el agarre pronado y reparte el trabajo entre dorsal y espalda alta.'},
- 'High row en máquina':{i:'',d:'Máquina donde tiras desde arriba hacia abajo y atrás, con el pecho apoyado. Vector diagonal entre el jalón y el remo.'},
- 'Dominadas pronadas anchas':{i:'',d:'Colgado con las palmas hacia adelante y las manos anchas. La versión más dura, muy centrada en espalda alta.'},
- 'Lat pulldown con codos abiertos':{i:'',d:'Agarre medio pero llevando los codos hacia afuera en vez de pegados. Traslada el trabajo del dorsal al trapecio medio.'},
+ 'Lat pulldown agarre neutro ancho':{g:'videos/0818-rkg41Fb.gif',i:'',d:'Barra ancha con asas paralelas: manos separadas y palmas enfrentadas, tiras al pecho alto. Es más amable con el hombro que el agarre pronado y reparte el trabajo entre dorsal y espalda alta.'},
+ 'High row en máquina':{g:'videos/0581-nZZZy9m.gif',i:'',d:'Máquina donde tiras desde arriba hacia abajo y atrás, con el pecho apoyado. Vector diagonal entre el jalón y el remo.'},
+ 'Dominadas pronadas anchas':{g:'videos/1429-Qqi7bko.gif',i:'',d:'Colgado con las palmas hacia adelante y las manos anchas. La versión más dura, muy centrada en espalda alta.'},
+ 'Lat pulldown con codos abiertos':{g:'videos/0150-eYnzaCm.gif',i:'',d:'Agarre medio pero llevando los codos hacia afuera en vez de pegados. Traslada el trabajo del dorsal al trapecio medio.'},
 
- 'Reverse pec deck':{i:'',d:'El pec deck al revés: pecho contra la almohadilla, abres los brazos hacia atrás. La forma más limpia de aislar el deltoide posterior.'},
- 'Cruces invertidos en polea':{i:'',d:'De pie entre dos poleas altas, brazos cruzados que abres hacia afuera y atrás. Tensión constante en todo el arco.'},
- 'Pájaros en banco inclinado':{i:'',d:'Boca abajo sobre un banco inclinado, abres las mancuernas hacia los lados. El apoyo evita que uses la espalda baja.'},
- 'Face pull':{i:'',d:'Polea a la altura de la cara con cuerda: tiras hacia la frente separando las manos y con los codos altos. Deltoide posterior y rotadores.'},
- 'Reverse fly unilateral en polea':{i:'',d:'Un brazo por vez, polea cruzada por delante que abres hacia atrás. El rango es mayor que con las dos manos a la vez.'},
+ 'Reverse pec deck':{g:'videos/0602-myfUsKf.gif',i:'',d:'El pec deck al revés: pecho contra la almohadilla, abres los brazos hacia atrás. La forma más limpia de aislar el deltoide posterior.'},
+ 'Cruces invertidos en polea':{g:'videos/0154-aqvSOQE.gif',i:'',d:'De pie entre dos poleas altas, brazos cruzados que abres hacia afuera y atrás. Tensión constante en todo el arco.'},
+ 'Pájaros en banco inclinado':{g:'videos/0326-vYk8lqw.gif',i:'',d:'Boca abajo sobre un banco inclinado, abres las mancuernas hacia los lados. El apoyo evita que uses la espalda baja.'},
+ 'Face pull':{g:'videos/0203-wqNPGCg.gif',i:'',d:'Polea a la altura de la cara con cuerda: tiras hacia la frente separando las manos y con los codos altos. Deltoide posterior y rotadores.'},
+ 'Reverse fly unilateral en polea':{g:'videos/0191-dB07vDu.gif',i:'',d:'Un brazo por vez, polea cruzada por delante que abres hacia atrás. El rango es mayor que con las dos manos a la vez.'},
 
- 'Extensión overhead en polea con cuerda':{i:'',d:'De espaldas a la polea, cuerda por detrás de la cabeza, extiendes los codos hacia arriba. El brazo sobre la cabeza estira la cabeza larga del tríceps.'},
- 'Extensión overhead con mancuerna sentado':{i:'',d:'Sentado, una mancuerna con las dos manos por detrás de la nuca. Codos apuntando al techo y quietos.'},
- 'Press francés con EZ acostado':{i:'',d:'Acostado en banco plano, bajas la EZ hacia la frente doblando solo el codo. Clásico, pero cuida el codo si te molesta.'},
+ 'Extensión overhead en polea con cuerda':{g:'videos/0194-2IxROQ1.gif',i:'',d:'De espaldas a la polea, cuerda por detrás de la cabeza, extiendes los codos hacia arriba. El brazo sobre la cabeza estira la cabeza larga del tríceps.'},
+ 'Extensión overhead con mancuerna sentado':{g:'videos/2188-kont8Ut.gif',i:'',d:'Sentado, una mancuerna con las dos manos por detrás de la nuca. Codos apuntando al techo y quietos.'},
+ 'Press francés con EZ acostado':{g:'videos/0060-h8LFzo9.gif',i:'',d:'Acostado en banco plano, bajas la EZ hacia la frente doblando solo el codo. Clásico, pero cuida el codo si te molesta.'},
  'Extensión overhead en máquina':{i:'',d:'La versión guiada del overhead. Ideal para las series al fallo sin pelear con la estabilización.'},
- 'Extensión overhead unilateral en polea':{i:'',d:'Un brazo por vez con agarre simple por detrás de la cabeza. Corrige asimetrías y da más rango.'},
+ 'Extensión overhead unilateral en polea':{g:'videos/1727-i11JWU7.gif',i:'',d:'Un brazo por vez con agarre simple por detrás de la cabeza. Corrige asimetrías y da más rango.'},
 
- 'Push-down con cuerda':{i:'',d:'Polea alta, codos pegados al costado, extiendes abriendo la cuerda al final. La apertura suma contracción en la cabeza lateral.'},
- 'Push-down con barra recta o V':{i:'',d:'Igual que con cuerda pero con barra fija. Permite más peso, aunque menos rango en la contracción final.'},
- 'Push-down unilateral agarre inverso':{i:'',d:'Un brazo con la palma hacia arriba. El agarre supino desplaza el trabajo hacia la cabeza medial del tríceps.'},
- 'Fondos en máquina':{i:'',d:'Máquina sentado que replica el fondo. Empujas hacia abajo con el torso vertical, así que carga tríceps más que pecho.'},
- 'Press cerrado en Smith':{i:'https://wger.de/media/exercise-images/192/Bench-press-1.png',d:'Press de banca con las manos a la anchura de los hombros en la barra guiada. Compuesto de tríceps con bastante carga.'},
+ 'Push-down con cuerda':{g:'videos/0200-dU605di.gif',i:'',d:'Polea alta, codos pegados al costado, extiendes abriendo la cuerda al final. La apertura suma contracción en la cabeza lateral.'},
+ 'Push-down con barra recta o V':{g:'videos/0201-3ZflifB.gif',i:'',d:'Igual que con cuerda pero con barra fija. Permite más peso, aunque menos rango en la contracción final.'},
+ 'Push-down unilateral agarre inverso':{g:'videos/1723-qRZ5S1N.gif',i:'',d:'Un brazo con la palma hacia arriba. El agarre supino desplaza el trabajo hacia la cabeza medial del tríceps.'},
+ 'Fondos en máquina':{g:'videos/1451-BRImeP8.gif',i:'',d:'Máquina sentado que replica el fondo. Empujas hacia abajo con el torso vertical, así que carga tríceps más que pecho.'},
+ 'Press cerrado en Smith':{g:'videos/0751-WcHl7ru.gif',i:'https://wger.de/media/exercise-images/192/Bench-press-1.png',d:'Press de banca con las manos a la anchura de los hombros en la barra guiada. Compuesto de tríceps con bastante carga.'},
 
- 'Hack squat':{i:'https://wger.de/media/exercise-images/130/Narrow-stance-hack-squats-1-1024x721.png',d:'Máquina con la espalda apoyada en un respaldo inclinado. Carga el cuádriceps a fondo con la espalda baja protegida.'},
- 'Sentadilla libre':{i:'https://wger.de/media/exercise-images/191/Front-squat-1-857x1024.png',d:'Barra sobre los trapecios, bajas hasta romper la paralela. La más exigente del día: quédate en RIR 0 a 1 con técnica intacta, sin buscar el fallo real.'},
- 'Leg press pies bajos':{i:'',d:'Pies bajos en la plataforma y juntos. Esa posición aumenta el recorrido de la rodilla y carga cuádriceps por sobre glúteo.'},
- 'Pendulum squat':{i:'',d:'Máquina donde el recorrido describe un arco en vez de una línea recta. Muy cómoda para la rodilla y brutal para el cuádriceps.'},
- 'Sentadilla en Smith pies adelantados':{i:'https://wger.de/media/exercise-images/191/Front-squat-1-857x1024.png',d:'Barra guiada con los pies por delante del cuerpo. Al ser fija la trayectoria, puedes adelantar los pies sin perder el equilibrio.'},
+ 'Hack squat':{g:'videos/0743-Qa55kX1.gif',i:'https://wger.de/media/exercise-images/130/Narrow-stance-hack-squats-1-1024x721.png',d:'Máquina con la espalda apoyada en un respaldo inclinado. Carga el cuádriceps a fondo con la espalda baja protegida.'},
+ 'Sentadilla libre':{g:'videos/0043-qXTaZnJ.gif',i:'https://wger.de/media/exercise-images/191/Front-squat-1-857x1024.png',d:'Barra sobre los trapecios, bajas hasta romper la paralela. La más exigente del día: quédate en RIR 0 a 1 con técnica intacta, sin buscar el fallo real.'},
+ 'Leg press pies bajos':{g:'videos/0739-10Z2DXU.gif',i:'',d:'Pies bajos en la plataforma y juntos. Esa posición aumenta el recorrido de la rodilla y carga cuádriceps por sobre glúteo.'},
+ 'Pendulum squat':{g:'videos/0743-Qa55kX1.gif',i:'',d:'Máquina donde el recorrido describe un arco en vez de una línea recta. Muy cómoda para la rodilla y brutal para el cuádriceps.'},
+ 'Sentadilla en Smith pies adelantados':{g:'videos/0770-jFtipLl.gif',i:'https://wger.de/media/exercise-images/191/Front-squat-1-857x1024.png',d:'Barra guiada con los pies por delante del cuerpo. Al ser fija la trayectoria, puedes adelantar los pies sin perder el equilibrio.'},
 
- 'Leg extension':{i:'',d:'Sentado, extiendes las rodillas contra el rodillo. Aislamiento puro de cuádriceps y la forma más segura de llegar al fallo.'},
- 'Sentadilla búlgara':{i:'',d:'Pie trasero apoyado en un banco, bajas con la pierna delantera. Exige equilibrio pero da un estiramiento enorme de glúteo y cuádriceps.'},
- 'Leg press unilateral':{i:'',d:'Una pierna a la vez en la prensa. Corrige diferencias entre lados y te deja cargar fuerte sin comprometer la espalda.'},
- 'Zancadas caminando':{i:'https://wger.de/media/exercise-images/113/Walking-lunges-1.png',d:'Avanzas alternando piernas con mancuernas en las manos. Trabajo unilateral con un componente de estabilidad importante.'},
- 'Sissy squat':{i:'',d:'Te inclinas hacia atrás dejando que las rodillas avancen, con los talones levantados. Estira el cuádriceps como ningún otro, pero cuida la rodilla.'},
+ 'Leg extension':{g:'videos/0585-my33uHU.gif',i:'',d:'Sentado, extiendes las rodillas contra el rodillo. Aislamiento puro de cuádriceps y la forma más segura de llegar al fallo.'},
+ 'Sentadilla búlgara':{g:'videos/0410-qx4fgX7.gif',i:'',d:'Pie trasero apoyado en un banco, bajas con la pierna delantera. Exige equilibrio pero da un estiramiento enorme de glúteo y cuádriceps.'},
+ 'Leg press unilateral':{g:'videos/1425-WWD6FzI.gif',i:'',d:'Una pierna a la vez en la prensa. Corrige diferencias entre lados y te deja cargar fuerte sin comprometer la espalda.'},
+ 'Zancadas caminando':{g:'videos/1460-IZVHb27.gif',i:'https://wger.de/media/exercise-images/113/Walking-lunges-1.png',d:'Avanzas alternando piernas con mancuernas en las manos. Trabajo unilateral con un componente de estabilidad importante.'},
+ 'Sissy squat':{g:'videos/1489-xdYPUtE.gif',i:'',d:'Te inclinas hacia atrás dejando que las rodillas avancen, con los talones levantados. Estira el cuádriceps como ningún otro, pero cuida la rodilla.'},
 
- 'Peso muerto rumano con barra':{i:'https://wger.de/media/exercise-images/161/Dead-lifts-2.png',d:'Bisagra de cadera con las piernas casi rectas: llevas la cadera atrás y la barra baja pegada al muslo. Para cuando sientas el estiramiento del isquio, no cuando toque el suelo.'},
- 'Peso muerto rumano con mancuernas':{i:'https://wger.de/media/exercise-images/161/Dead-lifts-2.png',d:'Mismo patrón de bisagra pero con mancuernas, que permiten bajar un poco más. Buena opción si la barra te molesta la espalda baja.'},
- 'Peso muerto rumano unilateral':{i:'',d:'A una pierna, con la contraria extendida hacia atrás como contrapeso. Menos carga pero mucho más estiramiento y trabajo de estabilidad.'},
- 'Good morning':{i:'',d:'Barra sobre los trapecios y bisagra de cadera hacia adelante. Muy exigente para la espalda baja: usa poco peso y prioriza la técnica.'},
- 'Hiperextensión 45° con peso':{i:'https://wger.de/media/exercise-images/128/Hyperextensions-1.png',d:'En el banco inclinado de espalda baja, bajas y subes el torso abrazando un disco. Redondea isquios y glúteo sin cargar la columna.'},
+ 'Peso muerto rumano con barra':{g:'videos/0085-wQ2c4XD.gif',i:'https://wger.de/media/exercise-images/161/Dead-lifts-2.png',d:'Bisagra de cadera con las piernas casi rectas: llevas la cadera atrás y la barra baja pegada al muslo. Para cuando sientas el estiramiento del isquio, no cuando toque el suelo.'},
+ 'Peso muerto rumano con mancuernas':{g:'videos/1459-rR0LJzx.gif',i:'https://wger.de/media/exercise-images/161/Dead-lifts-2.png',d:'Mismo patrón de bisagra pero con mancuernas, que permiten bajar un poco más. Buena opción si la barra te molesta la espalda baja.'},
+ 'Peso muerto rumano unilateral':{g:'videos/1757-gKozT8X.gif',i:'',d:'A una pierna, con la contraria extendida hacia atrás como contrapeso. Menos carga pero mucho más estiramiento y trabajo de estabilidad.'},
+ 'Good morning':{g:'videos/0044-XlZ4lAC.gif',i:'',d:'Barra sobre los trapecios y bisagra de cadera hacia adelante. Muy exigente para la espalda baja: usa poco peso y prioriza la técnica.'},
+ 'Hiperextensión 45° con peso':{g:'videos/0489-zhMwOwE.gif',i:'https://wger.de/media/exercise-images/128/Hyperextensions-1.png',d:'En el banco inclinado de espalda baja, bajas y subes el torso abrazando un disco. Redondea isquios y glúteo sin cargar la columna.'},
 
- 'Curl femoral sentado':{i:'https://wger.de/media/exercise-images/117/seated-leg-curl-large-1.png',d:'Sentado con el rodillo sobre los tobillos. La cadera flexionada estira el isquio de entrada, así que rinde más que el tumbado.'},
- 'Curl femoral tumbado':{i:'https://wger.de/media/exercise-images/154/lying-leg-curl-machine-large-1.png',d:'Boca abajo, flexionas las rodillas contra el rodillo. No dejes que la cadera se levante del banco.'},
- 'Curl femoral unilateral de pie':{i:'https://wger.de/media/exercise-images/118/standing-leg-curls-large-1.png',d:'Una pierna a la vez, de pie en la máquina. Corrige asimetrías entre lados, que en isquios son frecuentes.'},
- 'Curl nórdico':{i:'',d:'De rodillas con los tobillos sujetos, bajas el cuerpo frenando con los isquios. Durísimo y excéntrico puro. Si no aguantas, ayúdate con las manos al llegar abajo.'},
+ 'Curl femoral sentado':{g:'videos/0599-Zg3XY7P.gif',i:'https://wger.de/media/exercise-images/117/seated-leg-curl-large-1.png',d:'Sentado con el rodillo sobre los tobillos. La cadera flexionada estira el isquio de entrada, así que rinde más que el tumbado.'},
+ 'Curl femoral tumbado':{g:'videos/0586-17lJ1kr.gif',i:'https://wger.de/media/exercise-images/154/lying-leg-curl-machine-large-1.png',d:'Boca abajo, flexionas las rodillas contra el rodillo. No dejes que la cadera se levante del banco.'},
+ 'Curl femoral unilateral de pie':{g:'videos/0795-C5jncD2.gif',i:'https://wger.de/media/exercise-images/118/standing-leg-curls-large-1.png',d:'Una pierna a la vez, de pie en la máquina. Corrige asimetrías entre lados, que en isquios son frecuentes.'},
+ 'Curl nórdico':{g:'videos/0496-ms7tjSG.gif',i:'',d:'De rodillas con los tobillos sujetos, bajas el cuerpo frenando con los isquios. Durísimo y excéntrico puro. Si no aguantas, ayúdate con las manos al llegar abajo.'},
 
- 'Hip thrust':{i:'',d:'Espalda alta apoyada en un banco, barra sobre la cadera, empujas hasta alinear el torso. El mejor ejercicio de glúteo por carga directa.'},
- 'Abducción en máquina':{i:'',d:'Sentado, abres las rodillas contra las almohadillas. Inclina el torso hacia adelante para cargar más el glúteo medio.'},
- 'Leg press pies altos y anchos':{i:'',d:'Pies arriba y separados en la plataforma. Esa posición reduce el recorrido de la rodilla y pasa el trabajo a glúteo e isquios.'},
- 'Patada de glúteo en polea':{i:'',d:'Polea baja en el tobillo, extiendes la cadera hacia atrás con la rodilla casi fija. Aislamiento de glúteo con tensión constante.'},
- 'Step-up':{i:'',d:'Subes a un cajón con una pierna, sin impulsarte con la de atrás. Cuanto más alto el cajón, más glúteo y menos cuádriceps.'},
+ 'Hip thrust':{g:'videos/1409-qKBpF7I.gif',i:'',d:'Espalda alta apoyada en un banco, barra sobre la cadera, empujas hasta alinear el torso. El mejor ejercicio de glúteo por carga directa.'},
+ 'Abducción en máquina':{g:'videos/0597-CHpahtl.gif',i:'',d:'Sentado, abres las rodillas contra las almohadillas. Inclina el torso hacia adelante para cargar más el glúteo medio.'},
+ 'Leg press pies altos y anchos':{g:'videos/0739-10Z2DXU.gif',i:'',d:'Pies arriba y separados en la plataforma. Esa posición reduce el recorrido de la rodilla y pasa el trabajo a glúteo e isquios.'},
+ 'Patada de glúteo en polea':{g:'videos/0860-HEJ6DIX.gif',i:'',d:'Polea baja en el tobillo, extiendes la cadera hacia atrás con la rodilla casi fija. Aislamiento de glúteo con tensión constante.'},
+ 'Step-up':{g:'videos/0431-aXtJhlg.gif',i:'',d:'Subes a un cajón con una pierna, sin impulsarte con la de atrás. Cuanto más alto el cajón, más glúteo y menos cuádriceps.'},
 
- 'Máquina de aductores':{i:'',d:'Sentado, cierras las rodillas contra las almohadillas. Aislamiento directo de la cara interna del muslo.'},
- 'Leg press stance sumo':{i:'',d:'En la prensa con los pies muy anchos y las puntas hacia afuera. El stance abierto mete bastante aductor además del cuádriceps.'},
- 'Copenhagen plank':{i:'',d:'Plancha lateral con la pierna de arriba apoyada en un banco, sosteniendo con el aductor. Es isométrico: anota segundos en vez de repeticiones.'},
+ 'Máquina de aductores':{g:'videos/0598-oHsrypV.gif',i:'',d:'Sentado, cierras las rodillas contra las almohadillas. Aislamiento directo de la cara interna del muslo.'},
+ 'Leg press stance sumo':{g:'videos/0739-10Z2DXU.gif',i:'',d:'En la prensa con los pies muy anchos y las puntas hacia afuera. El stance abierto mete bastante aductor además del cuádriceps.'},
+ 'Copenhagen plank':{g:'videos/1775-VO2qeJg.gif',i:'',d:'Plancha lateral con la pierna de arriba apoyada en un banco, sosteniendo con el aductor. Es isométrico: anota segundos en vez de repeticiones.'},
 
- 'Elevación de gemelos de pie':{i:'https://wger.de/media/exercise-images/1243/53d4fabe-c994-4907-873f-8d82813a9832.png',d:'De pie con la rodilla extendida, subes a punta de pie. La rodilla recta apunta al gastrocnemio, el gemelo visible.'},
- 'Elevación de gemelos sentado':{i:'https://wger.de/media/exercise-images/1243/53d4fabe-c994-4907-873f-8d82813a9832.png',d:'Sentado con peso sobre las rodillas. La rodilla flexionada saca al gastrocnemio y deja trabajando al sóleo, debajo.'},
- 'Gemelos en leg press':{i:'https://wger.de/media/exercise-images/1243/53d4fabe-c994-4907-873f-8d82813a9832.png',d:'En la prensa, con solo la punta del pie en la plataforma. Permite mucha carga y un estiramiento profundo abajo.'},
- 'Gemelos en Smith':{i:'https://wger.de/media/exercise-images/1243/53d4fabe-c994-4907-873f-8d82813a9832.png',d:'Barra guiada sobre los hombros, de pie sobre un step. La guía te deja concentrarte en el rango completo.'},
+ 'Elevación de gemelos de pie':{g:'videos/0605-ykUOVze.gif',i:'https://wger.de/media/exercise-images/1243/53d4fabe-c994-4907-873f-8d82813a9832.png',d:'De pie con la rodilla extendida, subes a punta de pie. La rodilla recta apunta al gastrocnemio, el gemelo visible.'},
+ 'Elevación de gemelos sentado':{g:'videos/0594-bOOdeyc.gif',i:'https://wger.de/media/exercise-images/1243/53d4fabe-c994-4907-873f-8d82813a9832.png',d:'Sentado con peso sobre las rodillas. La rodilla flexionada saca al gastrocnemio y deja trabajando al sóleo, debajo.'},
+ 'Gemelos en leg press':{g:'videos/1391-ykHcWme.gif',i:'https://wger.de/media/exercise-images/1243/53d4fabe-c994-4907-873f-8d82813a9832.png',d:'En la prensa, con solo la punta del pie en la plataforma. Permite mucha carga y un estiramiento profundo abajo.'},
+ 'Gemelos en Smith':{g:'videos/0773-6MaEjVA.gif',i:'https://wger.de/media/exercise-images/1243/53d4fabe-c994-4907-873f-8d82813a9832.png',d:'Barra guiada sobre los hombros, de pie sobre un step. La guía te deja concentrarte en el rango completo.'},
 
- 'Crunch en polea arrodillado':{i:'https://wger.de/media/exercise-images/91/Crunches-1.png',d:'Arrodillado bajo la polea alta con la cuerda tras la nuca, flexionas la columna llevando los codos al suelo. Redondea la espalda a propósito: eso es el ejercicio.'},
- 'Crunch en máquina':{i:'https://wger.de/media/exercise-images/91/Crunches-1.png',d:'Sentado en la máquina de abdomen. Resistencia pareja y fácil de progresar en peso, que en abdomen suele ser el problema.'},
- 'Sit-up declinado con peso':{i:'https://wger.de/media/exercise-images/93/Decline-crunch-1.png',d:'En banco declinado con un disco en el pecho. Rango largo, aunque entra bastante flexor de cadera además del recto abdominal.'},
+ 'Crunch en polea arrodillado':{g:'videos/0175-WW95auq.gif',i:'https://wger.de/media/exercise-images/91/Crunches-1.png',d:'Arrodillado bajo la polea alta con la cuerda tras la nuca, flexionas la columna llevando los codos al suelo. Redondea la espalda a propósito: eso es el ejercicio.'},
+ 'Crunch en máquina':{g:'videos/0595-ZnJHhMk.gif',i:'https://wger.de/media/exercise-images/91/Crunches-1.png',d:'Sentado en la máquina de abdomen. Resistencia pareja y fácil de progresar en peso, que en abdomen suele ser el problema.'},
+ 'Sit-up declinado con peso':{g:'videos/3670-EZeDVzO.gif',i:'https://wger.de/media/exercise-images/93/Decline-crunch-1.png',d:'En banco declinado con un disco en el pecho. Rango largo, aunque entra bastante flexor de cadera además del recto abdominal.'},
 
- 'Elevación de piernas colgado':{i:'https://wger.de/media/exercise-images/125/Leg-raises-2.png',d:'Colgado de la barra, subes las piernas rectas. Para que trabaje el abdomen y no solo la cadera, termina el movimiento inclinando la pelvis hacia arriba.'},
- 'Reverse crunch declinado':{i:'https://wger.de/media/exercise-images/93/Decline-crunch-1.png',d:'Tumbado en banco declinado, llevas las rodillas al pecho despegando la cadera. Enfatiza la porción baja del abdomen.'},
- 'Elevación de rodillas en paralelas':{i:'https://wger.de/media/exercise-images/125/Leg-raises-2.png',d:'Apoyado en los antebrazos en el caballete, subes las rodillas al pecho. Versión más accesible que la colgada.'},
- 'Ab wheel':{i:'',d:'Con la rueda, ruedas hacia adelante resistiendo la extensión y vuelves. Anti-extensión puro: el abdomen trabaja evitando que la espalda se arquee.'},
+ 'Elevación de piernas colgado':{g:'videos/0472-I3tsCnC.gif',i:'https://wger.de/media/exercise-images/125/Leg-raises-2.png',d:'Colgado de la barra, subes las piernas rectas. Para que trabaje el abdomen y no solo la cadera, termina el movimiento inclinando la pelvis hacia arriba.'},
+ 'Reverse crunch declinado':{g:'videos/0872-nCU1Ekp.gif',i:'https://wger.de/media/exercise-images/93/Decline-crunch-1.png',d:'Tumbado en banco declinado, llevas las rodillas al pecho despegando la cadera. Enfatiza la porción baja del abdomen.'},
+ 'Elevación de rodillas en paralelas':{g:'videos/0826-ZNgOYQU.gif',i:'https://wger.de/media/exercise-images/125/Leg-raises-2.png',d:'Apoyado en los antebrazos en el caballete, subes las rodillas al pecho. Versión más accesible que la colgada.'},
+ 'Ab wheel':{g:'videos/0857-NAgVB3t.gif',i:'',d:'Con la rueda, ruedas hacia adelante resistiendo la extensión y vuelves. Anti-extensión puro: el abdomen trabaja evitando que la espalda se arquee.'},
 
- 'Elevación frontal en polea':{i:'',d:'Polea baja por delante, subes el brazo recto hasta la altura de los ojos. Deltoide anterior aislado, útil cuando ya no queda para otro press.'},
+ 'Elevación frontal en polea':{g:'videos/0162-u2X71Np.gif',i:'',d:'Polea baja por delante, subes el brazo recto hasta la altura de los ojos. Deltoide anterior aislado, útil cuando ya no queda para otro press.'},
 
- 'Peso muerto convencional':{i:'https://wger.de/media/exercise-images/161/Dead-lifts-2.png',d:'Levantas la barra desde el suelo con la espalda neutra hasta quedar de pie. Trabaja toda la cadena posterior: isquios, glúteo y espalda baja. Es el más fatigante de la app: quédate en RIR 1 o 2 y no lo lleves al fallo.'}
+ 'Peso muerto convencional':{g:'videos/0032-ila4NZS.gif',i:'https://wger.de/media/exercise-images/161/Dead-lifts-2.png',d:'Levantas la barra desde el suelo con la espalda neutra hasta quedar de pie. Trabaja toda la cadena posterior: isquios, glúteo y espalda baja. Es el más fatigante de la app: quédate en RIR 1 o 2 y no lo lleves al fallo.'}
 };
 
 const KEY='split4dias:v2', TOP=10, LB=2.20462;
@@ -794,11 +803,13 @@ function renderDay(){
             (inf?'<button class="help '+(isG?'on':'')+'" data-guide="'+key+'" aria-expanded="'+isG+'" aria-label="Cómo se hace '+o+'">'+ICON.help+'</button>':'')+
           '</div>'+
           (inf&&isG?'<div class="guide"><div class="gh">Cómo se hace</div><div class="gb">'+
-            (inf.i?'<img src="'+inf.i+'" alt="'+o+'" loading="lazy">':'')+
+            (inf.g?'<img src="'+GV+inf.g+'" alt="'+o+'" loading="lazy" data-alt="'+(inf.i||'')+'" onerror="gifFail(this)">':
+              inf.i?'<img src="'+inf.i+'" alt="'+o+'" loading="lazy" onerror="this.remove()">':'')+
             '<div class="gtx"><p>'+inf.d+'</p>'+
             '<a class="vid" href="https://www.youtube.com/results?search_query='+
               encodeURIComponent(o+' técnica ejercicio')+'" target="_blank" rel="noopener">'+ICON.play+'Ver demostración</a>'+
-            (inf.i?'<p class="cred">Ilustración: wger.de · CC BY-SA</p>':'')+
+            (inf.g?'<p class="cred">Animación: <a href="https://gymvisual.com/" target="_blank" rel="noopener">© Gym visual</a></p>':
+              inf.i?'<p class="cred">Ilustración: wger.de · CC BY-SA</p>':'')+
           '</div></div></div>':'');
         }).join('')+
         logBlock+
@@ -854,7 +865,7 @@ function renderNotes(){
     '<p>Además, al tocar KG o LB dentro de una ficha, lo que ya tengas escrito <b>se convierte solo</b>: no tienes que volver a escribir nada. Y bajo las series aparece siempre la equivalencia en la otra unidad, redondeada a una décima. No busques precisión de laboratorio ahí: los discos de gimnasio ya vienen redondeados de fábrica y 45 lb rara vez son exactamente 20,4 kg en la práctica.</p>'+
 
     '<h2>Largo y corto</h2>'+
-    '<p>Cada día tiene dos versiones. <b>Largo</b> es el entrenamiento completo. <b>Corto</b> deja los compuestos con sus series intactas y recorta los aislamientos, apuntando a unos 40 minutos. La elección se guarda por día, así que puedes tener Push en corto y Piernas en largo al mismo tiempo.</p>'+
+    '<p>Cada día tiene dos versiones. <b>Largo</b> es el entrenamiento completo. <b>Corto</b> deja los compuestos con sus series intactas y recorta los aislamientos, apuntando a unos 40 minutos. La elección se guarda por día, así que puedes tener Push en corto y Legs en largo al mismo tiempo.</p>'+
     '<p>Lo que se recorta en corto no es al azar: se van los segundos ángulos de un mismo músculo y baja una serie en los aislamientos que recuperan rápido. Los compuestos que quedan no pierden series, porque son los que sostienen la progresión.</p>'+
     '<p>En Push y Pull el corto prioriza el brazo. En Push sale el press vertical, porque el press inclinado y la apertura ya le dan estímulo al deltoide anterior, y entra un segundo ejercicio de brazo. En Pull sale el remo para dorsal, porque el remo de espalda alta, el jalón y el deltoide posterior ya cubren la espalda, y entra un segundo ejercicio de brazo. El brazo que entra es el que toca ese día según el reparto: en híbrido, bíceps en Push y tríceps en Pull; en normal, al revés.</p>'+
 
@@ -876,7 +887,7 @@ function renderNotes(){
     '<p>El bíceps entra fresco el lunes porque ningún press lo toca, y el tríceps entra fresco el martes porque ningún remo ni jalón lo toca. Con dos series al fallo no te sobra margen: si el tríceps llega pre-fatigado de tres movimientos de press, esas dos series valen bastante menos.</p>'+
 
     '<h2>Por qué este orden</h2>'+
-    '<p>Piernas en miércoles parte la semana y le da un día de descanso al torso antes del Upper. Push va antes que Pull para que el pecho tenga dos días completos antes del jueves; la espalda tolera mejor la frecuencia y se banca el martes a jueves.</p>'+
+    '<p>Legs en miércoles parte la semana y le da un día de descanso al torso antes del Upper. Push va antes que Pull para que el pecho tenga dos días completos antes del jueves; la espalda tolera mejor la frecuencia y se banca el martes a jueves.</p>'+
 
     '<h2>El punto débil</h2>'+
     '<p>El tríceps queda martes y jueves, con un solo día entre medio. Si el jueves rinde mal, usa una variante de polea o máquina y déjalo como trabajo controlado en vez de una serie brutal al fallo.</p>'+
@@ -891,12 +902,12 @@ function renderNotes(){
     '<p>Es agresivo. La creatina ayuda en el rendimiento dentro de la serie y algo en recuperación, pero no compensa la fatiga de sistema nervioso ni el daño local de entrenar al fallo cuatro días corridos. Dos ajustes: lleva la <b>primera</b> serie de los compuestos grandes a RIR 1 y solo la segunda al fallo, y mete una semana de descarga cada 6 a 8 semanas. Si el historial se te aplana en varios ejercicios a la vez, esa es la señal.</p>'+
 
     '<h2>El costo de bajar a 4 días</h2>'+
-    '<p>Piernas a una vez por semana mantiene y progresa lento, no construye. Es un intercambio consciente con tu prioridad. Si quieres corregirlo sin volver a cinco días, pega un curl femoral y un hip thrust al final del Upper.</p>'+
+    '<p>Legs una vez por semana mantiene y progresa lento, no construye. Es un intercambio consciente con tu prioridad. Si quieres corregirlo sin volver a cinco días, pega un curl femoral y un hip thrust al final del Upper.</p>'+
 
     '<h2>Volumen semanal</h2>'+
     '<table><tr><th>Músculo</th><th>Series</th><th>Frec.</th></tr>'+rws+'</table>'+
     '<h2>Créditos</h2>'+
-    '<p>Ilustraciones de los ejercicios: wger.de, con licencia CC BY-SA.</p>'+
+    '<p>Animaciones de los ejercicios: © Gym visual (gymvisual.com), vía exercises-dataset. Ilustraciones de respaldo: wger.de, con licencia CC BY-SA.</p>'+
     '<h2>Respaldo</h2>'+
     '<p>Tu historial vive solo dentro de este ícono del teléfono. Para pasarlo a otro ícono o a otro teléfono: <b>copia el respaldo aquí</b>, abre la app nueva, vuelve a esta sección y <b>pégalo en Restaurar</b>.</p>'+
     '<div class="bk">'+
