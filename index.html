@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>VANDAL</title>
 <meta name="theme-color" content="#0B0B0C">
-<meta name="app-version" content="2026.09.30-15">
+<meta name="app-version" content="2026.09.30-16">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -360,6 +360,29 @@
   .rest.over button{background:var(--pin-ink);border-color:var(--pin-ink);color:var(--pin)}
   body.resting .finish{padding-bottom:96px}
 
+  .delta.pr{width:auto;padding:3px 6px;border-radius:3px;background:var(--pin);color:var(--pin-ink);
+       font-family:var(--ft);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+
+  .cierre{margin:10px 0 4px;padding:12px 14px 12px;border-radius:8px;background:#131211;border:1px solid var(--pin-edge)}
+  .cierre .ch{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;
+       font-family:var(--ft);font-weight:800;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--pin)}
+  .cierre .ch button{min-height:36px;padding:0 12px;border-radius:5px;cursor:pointer;background:none;border:1px solid var(--rule);
+       color:var(--stamp);font-family:var(--ft);font-weight:800;font-size:11.5px;letter-spacing:.14em;text-transform:uppercase}
+  .cierre .pstats{margin-bottom:0}
+  .cpr{list-style:none;margin-top:10px}
+  .cpr li{display:flex;align-items:baseline;gap:8px;padding:7px 0;border-top:1px solid var(--rule);font-size:14px;color:#CFC6B4}
+  .cpr i{flex:none;font-style:normal;font-family:var(--ft);font-weight:800;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--pin)}
+  .cpr span{flex:1;min-width:0}
+  .cpr b{flex:none;color:var(--stamp);font-weight:700}
+
+  .pstats.const{grid-template-columns:repeat(4,1fr);margin-bottom:14px}
+  .cal{display:grid;grid-template-rows:repeat(7,1fr);grid-auto-flow:column;grid-auto-columns:1fr;gap:3px;max-width:420px}
+  .cal i{aspect-ratio:1;border-radius:2px;background:var(--plate)}
+  .cal i.on{background:var(--pin)}
+  .cal i.fut{background:none}
+  .cal i.hoy{box-shadow:inset 0 0 0 1px var(--stamp)}
+  .notes .pnote b{color:var(--stamp)}
+
   .week td:first-child{position:relative}
   .alarmseg{margin:4px 0 14px}
   .steps{margin:0 0 14px;padding-left:22px;font-size:15px;line-height:1.55;color:#CFC6B4}
@@ -606,7 +629,7 @@ const INFO={
 
 const KEY='split4dias:v2', TOP=10, LB=2.20462;
 let S={sel:{},done:{},last:{},log:{},hist:{},mode:{},split:'h',unit:{}};
-let day='push', open=null, timer=null, guide=null, prog=null;
+let day='push', open=null, timer=null, guide=null, prog=null, cierre=null;
 
 /* modo del día: 'largo' (todo) o 'corto' (solo lo marcado con sh) */
 const modeOf=k=>(S.mode&&S.mode[k])||'largo';
@@ -643,7 +666,8 @@ const STORE={
 
 async function load(){
   try{const v=await STORE.get(); if(v) S=Object.assign(S,JSON.parse(v));}catch(e){}
-  ['sel','done','last','log','hist','mode','unit'].forEach(k=>{S[k]=S[k]||{}});
+  ['sel','done','last','log','hist','mode','unit','start'].forEach(k=>{S[k]=S[k]||{}});
+  if(!Array.isArray(S.ses)) S.ses=[];
   if(S.split!=='h'&&S.split!=='n') S.split='h';
   migrateDrops();
   const m1=migrateNames(), m2=migrateMoves();
@@ -692,13 +716,20 @@ const MESES=['ene','feb','mar','abr','may','jun','jul','ago','sep','oct','nov','
    los anteriores solo "24 sept", todos de 2026, cuando empezó la app. */
 function fechaKey(x){
   if(x&&x.t) return new Date(x.t+'T12:00').getTime();
-  const m=/(\d+)\D*([a-zñ]{3})/i.exec((x&&x.d)||''); if(!m) return 0;
+  const m=/(\d+)[^a-zñ]*([a-zñ]{3})/i.exec((x&&x.d)||''); if(!m) return 0;
   return new Date(2026,MESES.indexOf(m[2].toLowerCase()),+m[1],12).getTime();
 }
 const pad2=n=>String(n).padStart(2,'0');
 const hoyISO=()=>{const t=new Date();return t.getFullYear()+'-'+pad2(t.getMonth()+1)+'-'+pad2(t.getDate());};
 function migrateMoves(){
   let cambio=false; S.mig=S.mig||[];
+  /* una versión anterior leía mal "sept" al ordenar: se reordena todo una vez */
+  if(S.mig.indexOf('2026-09-orden')<0){
+    Object.keys(S.hist).forEach(function(v){
+      if(Array.isArray(S.hist[v])) S.hist[v].sort((x,y)=>fechaKey(y)-fechaKey(x));
+    });
+    S.mig.push('2026-09-orden'); cambio=true;
+  }
   MOVES.forEach(function(mv){
     if(S.mig.indexOf(mv.id)>=0) return;
     if(S.hist[mv.de]){
@@ -909,6 +940,69 @@ function seriesSemana(off){
   return out;
 }
 
+/* ---- Récords ----
+   Una serie es récord si su 1RM estimado supera el mejor de todo el historial de esa
+   variante. Con margen chico para que el redondeo entre kg y lb no invente récords. */
+function mejorE(v,U){const p=puntos(v,U);return p.length?Math.max.apply(null,p.map(q=>q.e)):null;}
+const esRecord=(r,U,BE)=>{const w=num(r.w),n=num(r.r);return BE!==null&&w!==null&&n!==null&&w>0&&n>0&&e1rm(w,n)>BE+0.05;};
+function chip(r,prev,U,pu,BE){return esRecord(r,U,BE)?{c:'pr',x:'Récord'}:delta(r,prev,U,pu);}
+
+/* ---- Duración de la sesión ----
+   Arranca con lo primero que anotas en el día. Un inicio de hace más de 5 horas
+   es una sesión que quedó abierta: se descarta y parte de nuevo. */
+const VIEJO=5*3600*1000;
+function inicio(d){const t=(S.start||{})[d];return t&&Date.now()-t<VIEJO?t:null;}
+function marcarInicio(d){S.start=S.start||{};if(!inicio(d)) S.start[d]=Date.now();}
+const hmm=ms=>{const m=Math.floor(ms/60000);return Math.floor(m/60)+':'+pad2(m%60);};
+setInterval(function(){
+  const el=document.querySelector('[data-live]'), t=inicio(day);
+  if(el&&t) el.textContent='En curso '+hmm(Date.now()-t);
+},20000);
+
+/* ---- Volumen y constancia (todo el historial, incluidos los registros antiguos) ---- */
+function kgSesion(x){
+  const hu=x.u||'kg'; let v=0;
+  (x.s||[]).forEach(function(s){
+    const w=inU(s.w,hu,'kg'), r=num(s.r); if(w!==null&&r!==null) v+=w*r;
+    (Array.isArray(s.d)?s.d:[]).forEach(function(z){const zw=inU(z.w,hu,'kg'),zr=num(z.r);if(zw!==null&&zr!==null)v+=zw*zr;});
+  });
+  return v;
+}
+const ton=kg=>kg>=1000?(String(r1(kg/1000)).replace('.',','))+' t':Math.round(kg)+' kg';
+const isoDe=ms=>{const t=new Date(ms);return t.getFullYear()+'-'+pad2(t.getMonth()+1)+'-'+pad2(t.getDate());};
+function diasEntrenados(){
+  const set=new Set();
+  Object.values(S.hist).forEach(h=>(h||[]).forEach(function(x){const k=fechaKey(x);if(k)set.add(isoDe(k));}));
+  return set;
+}
+/* semana cumplida = 4 días entrenados entre lunes y domingo */
+function rachas(dias){
+  const porSem={}; dias.forEach(function(d){const t=new Date(d+'T12:00');t.setHours(0,0,0,0);t.setDate(t.getDate()-((t.getDay()+6)%7));porSem[t.getTime()]=(porSem[t.getTime()]||0)+1;});
+  /* se avanza con setDate y no sumando milisegundos: con el cambio de hora el lunes no dura 24 h */
+  const hoy=lunes(0); let actual=0, larga=0, run=0;
+  const keys=Object.keys(porSem).map(Number); if(!keys.length) return {actual:0,larga:0};
+  const paso=(w,n)=>{const t=new Date(w);t.setDate(t.getDate()+n);return t.getTime();};
+  for(let w=Math.min.apply(null,keys); w<=hoy; w=paso(w,7)){
+    if((porSem[w]||0)>=4){run++;larga=Math.max(larga,run);}
+    else if(w!==hoy) run=0;          /* la semana en curso no corta la racha */
+  }
+  for(let w=hoy, n=0; n<520; w=paso(w,-7), n++){
+    if((porSem[w]||0)>=4) actual++;
+    else if(w!==hoy) break;
+  }
+  return {actual:actual,larga:larga};
+}
+function calendario(dias){
+  const COLS=18, hoy=new Date(); hoy.setHours(0,0,0,0);
+  const ini=new Date(lunes(-(COLS-1))); let html='';
+  for(let i=0;i<COLS*7;i++){
+    const d=new Date(ini); d.setDate(ini.getDate()+i);
+    const iso=isoDe(d.getTime()), fut=d>hoy, on=dias.has(iso);
+    html+='<i class="'+(on?'on':'')+(fut?' fut':'')+(d.getTime()===hoy.getTime()?' hoy':'')+'" title="'+iso+'"></i>';
+  }
+  return '<div class="cal" role="img" aria-label="Días entrenados en las últimas '+COLS+' semanas">'+html+'</div>';
+}
+
 /* Íconos dibujados: un solo trazo de 2 px y puntas redondas en toda la app */
 const ICON=(function(){
   const s=(d,c)=>'<svg class="ico'+(c?' '+c:'')+'" viewBox="0 0 24 24" aria-hidden="true">'+d+'</svg>';
@@ -948,6 +1042,7 @@ function renderDay(){
     const h=sel?(S.hist[sel]||[]):[], G=sel?goal(sel):null, pset=h.length?h[0].s:null;
     const pu=h.length?(h[0].u||'kg'):'kg';
     const U=sel?unitOf(sel):'kg', UU=U.toUpperCase(), O=other(U);
+    const BE=sel&&h.length?mejorE(sel,U):null;   /* mejor 1RM estimado histórico: sobre eso, récord */
     /* equivalencia de lo anotado hoy, en la otra unidad */
     const eq=L.map(function(r){const n=inU(r.w,U,O);return n===null?null:n+'×'+(r.r||'–');}).filter(Boolean);
 
@@ -958,7 +1053,7 @@ function renderDay(){
       '</div></div>'+
       '<div class="goal '+G.c+'"><span class="k">'+G.k+'</span><span class="v">'+G.v+'</span></div>'+
       (pset?'<p class="hint">En gris, lo que hiciste la vez pasada.</p>':'')+
-      L.map(function(r,k){const D=delta(r,pset&&pset[k],U,pu);
+      L.map(function(r,k){const D=chip(r,pset&&pset[k],U,pu,BE);
         const D2=Array.isArray(r.d)?r.d:[];
         /* lo de la vez pasada vive en el mismo campo donde se anota hoy */
         const ps=pset&&pset[k], pw=ps?inU(ps.w,pu,U):null, pr=ps&&num(ps.r)!==null?num(ps.r):null;
@@ -1050,12 +1145,43 @@ function renderDay(){
   const mins=Math.round((series*3+5)/5)*5;
   return '<header class="dayhead"><span class="emb" aria-hidden="true"><svg class="vmark"><use href="#vandal"/></svg></span>'+
       '<h1>'+d.title+'</h1><p class="sub">'+txt(d.sub)+'</p>'+
-      '<p class="spec"><span>'+total+' ejercicios</span><span>'+series+' series</span><span>~'+mins+' min</span>'+
+      '<p class="spec"><span>'+total+' ejercicios</span><span>'+series+' series</span>'+
+        '<span data-live>'+(inicio(day)?'En curso '+hmm(Date.now()-inicio(day)):'~'+mins+' min')+'</span>'+
         '<span class="prog" aria-label="'+doneN+' de '+total+' ejercicios hechos"><b>'+doneN+'</b>/'+total+'</span></p>'+
-    '</header>'+modeBar+'<div class="banner">'+ICON.note+'<span>'+txt(d.note)+'</span></div>'+
+    '</header>'+resumenCierre()+modeBar+'<div class="banner">'+ICON.note+'<span>'+txt(d.note)+'</span></div>'+
     '<ol class="stack">'+cards+'<li class="pin" role="presentation" aria-hidden="true"></li></ol>'+
     '<div class="finish"><button data-finish '+(doneN===0?'disabled':'')+'>Cerrar sesión de hoy</button>'+
     '<p>Guarda pesos, repeticiones y variantes en el historial. La próxima vez te muestra qué tienes que superar.</p></div>';
+}
+
+/* placa que queda arriba del día recién cerrado, hasta tocar Listo o cambiar de pestaña */
+function resumenCierre(){
+  const c=cierre; if(!c||c.dia!==day) return '';
+  return '<section class="cierre" aria-label="Resumen de la sesión">'+
+    '<div class="ch"><span>Sesión cerrada</span><button data-cierre>Listo</button></div>'+
+    '<div class="pstats">'+
+      '<div><b>'+(c.min?hmm(c.min*60000):'—')+'</b><span>Duración</span></div>'+
+      '<div><b>'+c.series+'</b><span>Series</span></div>'+
+      '<div><b>'+ton(c.kg)+'</b><span>Volumen</span></div>'+
+    '</div>'+
+    (c.pr.length?'<ul class="cpr">'+c.pr.map(p=>'<li><i>Récord</i><span>'+p.v+'</span><b>'+p.x+'</b></li>').join('')+'</ul>'
+      :'')+
+  '</section>';
+}
+
+function constancia(){
+  const dias=diasEntrenados(), R=rachas(dias);
+  let kg=0; Object.values(S.hist).forEach(h=>(h||[]).forEach(x=>{kg+=kgSesion(x);}));
+  const durs=(S.ses||[]).map(s=>s.min).filter(m=>m>0);
+  const prom=durs.length?Math.round(durs.reduce((a,b)=>a+b,0)/durs.length):null;
+  return '<div class="pstats const">'+
+      '<div><b>'+dias.size+'</b><span>Sesiones</span></div>'+
+      '<div><b>'+ton(kg)+'</b><span>Volumen total</span></div>'+
+      '<div><b>'+(prom?hmm(prom*60000):'—')+'</b><span>Duración media</span></div>'+
+      '<div><b>'+R.actual+' sem</b><span>Racha</span></div>'+
+    '</div>'+calendario(dias)+
+    '<p class="pnote">Últimas 18 semanas; cada cuadro es un día entrenado. La <b>racha</b> cuenta semanas seguidas con tus 4 días'+
+      (R.larga?' (la más larga: '+R.larga+')':'')+'; la semana en curso no la corta. La duración media se llena con las sesiones que cierres desde ahora.</p>';
 }
 
 function renderNotes(){
@@ -1073,10 +1199,6 @@ function renderNotes(){
   }).join('');
 
   return '<div class="notes">'+
-    '<h2>Esta semana</h2>'+
-    '<p>Series hechas por músculo desde el lunes, contra la meta del plan. Cuenta las sesiones que cierras con <b>Cerrar sesión de hoy</b>.'+
-      (hay?'':' Todavía no hay sesiones cerradas esta semana con la nueva versión: aparecen desde la próxima que cierres.')+'</p>'+
-    '<table class="week"><tr><th>Músculo</th><th>Hecho</th><th>Sem. pasada</th></tr>'+semana+'</table>'+
     '<h2>Convertidor kg ⇄ lb</h2>'+
     '<div class="conv"><div class="convrow">'+
       '<label class="fld"><input type="text" inputmode="decimal" id="ckg" data-conv="kg" placeholder="0" aria-label="Kilogramos"><u>KG</u></label>'+
@@ -1088,6 +1210,13 @@ function renderNotes(){
         .map(p=>'<span><b>'+p[0]+'</b> kg ≈ '+p[1]+' lb</span>').join('')+
     '</div></div>'+
     '<p>Escribe en cualquiera de los dos y el otro se calcula solo. La conversión exacta es <b>1 kg = 2,20462 lb</b>. Los discos olímpicos suelen venir en 45, 35, 25, 10, 5 y 2,5 lb, que son 20,4 / 15,9 / 11,3 / 4,5 / 2,3 / 1,1 kg.</p>'+
+    '<h2>Esta semana</h2>'+
+    '<p>Series hechas por músculo desde el lunes, contra la meta del plan. Cuenta las sesiones que cierras con <b>Cerrar sesión de hoy</b>.'+
+      (hay?'':' Todavía no hay sesiones cerradas esta semana con la nueva versión: aparecen desde la próxima que cierres.')+'</p>'+
+    '<table class="week"><tr><th>Músculo</th><th>Hecho</th><th>Sem. pasada</th></tr>'+semana+'</table>'+
+    '<h2>Constancia</h2>'+
+    constancia()+
+    '<h2>Unidades</h2>'+
     '<p>Recuerda que la unidad se elige <b>por variante</b> dentro de cada ficha, no de forma global. Si el hack squat de tu gym está en libras y la prensa en kilos, cada una guarda la suya.</p>'+
     '<p>Cambiar de unidad <b>no rompe la progresión</b>. Si un día anotas en kg y al siguiente en libras, la app convierte por dentro y te sigue comparando contra la sesión anterior. Cuando la comparación viene de otra unidad, el objetivo te lo dice con un <i>(convertido desde…)</i>.</p>'+
     '<p>Además, al tocar KG o LB dentro de una ficha, lo que ya tengas escrito <b>se convierte solo</b>: no tienes que volver a escribir nada. Y bajo las series aparece siempre la equivalencia en la otra unidad, redondeada a una décima. No busques precisión de laboratorio ahí: los discos de gimnasio ya vienen redondeados de fábrica y 45 lb rara vez son exactamente 20,4 kg en la práctica.</p>'+
@@ -1226,19 +1355,20 @@ document.addEventListener('input',function(e){
     if(Array.isArray(L[k].d)&&L[k].d[j]){L[k].d[j][f]=el.value.trim();save();}
     return;
   }
-  L[k][f]=el.value.trim(); save();
+  L[k][f]=el.value.trim(); if(L[k][f]) marcarInicio(day); save();
   const sel=g('sel',day,id), h=sel?(S.hist[sel]||[]):[];
   /* misma unidad de origen que usa renderDay; sin ella una sesión anterior
      en lb se leía como kg y el chip mostraba subidas o bajadas falsas */
   const pu=h.length?(h[0].u||'kg'):'kg';
-  const D=delta(L[k], h.length?h[0].s[k]:null, sel?unitOf(sel):'kg', pu);
+  const D=chip(L[k], h.length?h[0].s[k]:null, sel?unitOf(sel):'kg', pu, sel&&h.length?mejorE(sel,unitOf(sel)):null);
   const chip=document.querySelector('[data-d="'+id+'-'+k+'"]');
   if(chip){chip.className='delta '+D.c;chip.textContent=D.x;}
 });
 
 document.addEventListener('click',function(e){
   const go=e.target.closest('[data-go]');
-  if(go){day=go.dataset.go;open=null;guide=null;prog=null;scrollTo(0,0);return render();}
+  if(go){day=go.dataset.go;open=null;guide=null;prog=null;cierre=null;scrollTo(0,0);return render();}
+  if(e.target.closest('[data-cierre]')){cierre=null;return render();}
 
   const rx=e.target.closest('[data-rx]');
   if(rx){const a=rx.dataset.rx;
@@ -1321,11 +1451,18 @@ document.addEventListener('click',function(e){
 
   if(e.target.closest('[data-finish]')){
     const stamp=new Date().toLocaleDateString('es-CL',{day:'2-digit',month:'short'});
+    const t0=inicio(day), min=t0?Math.max(1,Math.round((Date.now()-t0)/60000)):null;
+    const sum={dia:day,min:min,series:0,kg:0,pr:[]};
     exList(day).forEach(function(ex){
       const v=g('sel',day,ex.id), L=(S.log[day]||{})[ex.id];
       if(!v||!L) return;
       const s=L.filter(x=>x.w!==''||x.r!==''||nd(x));
       if(!s.length) return;
+      /* resumen: se mide contra el historial de antes de guardar esta sesión */
+      const U=unitOf(v), BE=(S.hist[v]||[]).length?mejorE(v,U):null;
+      const top=s.filter(x=>esRecord(x,U,BE)).sort((a,b)=>e1rm(num(b.w),num(b.r))-e1rm(num(a.w),num(a.r)))[0];
+      if(top) sum.pr.push({v:v,x:top.w+' '+U+' × '+top.r});
+      sum.series+=s.length; sum.kg+=kgSesion({u:U,s:s});
       /* t: fecha completa; dia y ex: de qué día y casilla vino (para el resumen semanal).
          Sin tope: el historial completo es lo que permite ver el progreso de meses. */
       S.hist[v]=[{d:stamp,t:hoyISO(),dia:day,ex:ex.id,u:unitOf(v),s:s.map(x=>({w:x.w,r:x.r,
@@ -1334,12 +1471,15 @@ document.addEventListener('click',function(e){
     });
     S.last[day]=Object.assign({},S.last[day],S.sel[day]);
     S.sel[day]={};S.done[day]={};S.log[day]={};
+    if(min) S.ses.push({t:hoyISO(),dia:day,min:min});
+    if(S.start) delete S.start[day];
+    cierre=sum; stopRest();
     save();open=null;scrollTo(0,0);return render();
   }
 
   if(e.target.closest('[data-reset]')){
     if(!confirm('¿Borrar todo el historial? Esto no se puede deshacer. Si no tienes un respaldo, cópialo antes en Notas → Respaldo.')) return;
-    S={sel:{},done:{},last:{},log:{},hist:{},mode:{},split:'h',unit:{},mig:MOVES.map(m=>m.id)};save();return render();}
+    S={sel:{},done:{},last:{},log:{},hist:{},mode:{},split:'h',unit:{},start:{},ses:[],mig:MOVES.map(m=>m.id)};save();return render();}
 
   const bk=e.target.closest('[data-bk]');
   if(bk){
@@ -1382,7 +1522,8 @@ function restoreBackup(raw){
   const tmp=document.createElement('div'); tmp.innerHTML=backupSummary(d);
   if(!confirm('Vas a reemplazar lo que hay en este ícono por el respaldo. '+tmp.textContent+' ¿Continuar?')) return;
   S=Object.assign({sel:{},done:{},last:{},log:{},hist:{},mode:{},split:'h',unit:{}},d);
-  ['sel','done','last','log','hist','mode','unit'].forEach(function(k){S[k]=S[k]||{};});
+  ['sel','done','last','log','hist','mode','unit','start'].forEach(function(k){S[k]=S[k]||{};});
+  if(!Array.isArray(S.ses)) S.ses=[];
   if(S.split!=='h'&&S.split!=='n') S.split='h';
   migrateDrops(); migrateNames(); migrateMoves();
   STORE.set(JSON.stringify(S));
