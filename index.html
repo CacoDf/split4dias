@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>VANDAL</title>
 <meta name="theme-color" content="#0B0B0C">
-<meta name="app-version" content="2026.09.30-16">
+<meta name="app-version" content="2026.10.01-1">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -355,6 +355,7 @@
   .rest b{flex:1;font-family:var(--fd);font-weight:900;font-size:30px;line-height:1;letter-spacing:.02em;color:var(--stamp);font-variant-numeric:tabular-nums}
   .rest button{min-width:48px;min-height:44px;padding:0 10px;border-radius:5px;cursor:pointer;background:var(--ink2);border:1px solid var(--rule);
        color:var(--stamp);font-family:var(--ft);font-weight:800;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
+  .rest[hidden]{display:none}
   .rest.over{background:var(--pin);border-color:var(--pin)}
   .rest.over .rl,.rest.over b{color:var(--pin-ink)}
   .rest.over button{background:var(--pin-ink);border-color:var(--pin-ink);color:var(--pin)}
@@ -1361,8 +1362,8 @@ document.addEventListener('input',function(e){
      en lb se leía como kg y el chip mostraba subidas o bajadas falsas */
   const pu=h.length?(h[0].u||'kg'):'kg';
   const D=chip(L[k], h.length?h[0].s[k]:null, sel?unitOf(sel):'kg', pu, sel&&h.length?mejorE(sel,unitOf(sel)):null);
-  const chip=document.querySelector('[data-d="'+id+'-'+k+'"]');
-  if(chip){chip.className='delta '+D.c;chip.textContent=D.x;}
+  const el2=document.querySelector('[data-d="'+id+'-'+k+'"]');
+  if(el2){el2.className='delta '+D.c;el2.textContent=D.x;}
 });
 
 document.addEventListener('click',function(e){
