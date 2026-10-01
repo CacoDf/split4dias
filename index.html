@@ -4,7 +4,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>VANDAL</title>
 <meta name="theme-color" content="#0B0B0C">
-<meta name="app-version" content="2026.09.30-13">
+<meta name="app-version" content="2026.09.30-14">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -361,6 +361,10 @@
   body.resting .finish{padding-bottom:96px}
 
   .week td:first-child{position:relative}
+  .alarmseg{margin:4px 0 14px}
+  .steps{margin:0 0 14px;padding-left:22px;font-size:15px;line-height:1.55;color:#CFC6B4}
+  .steps li{margin-bottom:6px}
+  .steps b{color:var(--stamp)}
   .wbar{display:block;height:3px;margin-top:6px;border-radius:2px;background:var(--rule);overflow:hidden}
   .wbar i{display:block;height:100%;background:var(--steel)}
   .wbar i.ok{background:var(--pin)}
@@ -827,10 +831,17 @@ function progreso(v,U){
 }
 
 /* ---- Descanso ----
-   Compuestos 2:00, aislamientos 1:30. Arranca solo al completar peso y reps de una serie.
-   Se guarda la hora de término, no un contador: si la pantalla se apaga, al volver sigue bien. */
+   Compuestos 3:00, aislamientos 2:30. Solo arranca con el botón Descanso de la ficha.
+   Se guarda la hora de término, no un contador: si la pantalla se apaga, al volver sigue bien.
+   Una app web no puede sonar con el iPhone bloqueado, así que con la alarma activada el botón
+   además corre el atajo "Descanso VANDAL", que pone el temporizador del Reloj (ese sí suena). */
 const COMP=new Set(['p1','p2','p4','u1','u2','u3','u4','u10','l1','l3','x1','x3','x4','x5']);
-const restOf=id=>COMP.has(id)?120:90;
+const restOf=id=>COMP.has(id)?180:150;
+const ATAJO='Descanso VANDAL';
+function alarmaIphone(sec){
+  location.href='shortcuts://run-shortcut?name='+encodeURIComponent(ATAJO)+'&input=text&text='+sec;
+}
+function descansar(sec){startRest(sec); if(S.alarm) alarmaIphone(sec);}
 const mmss=s=>Math.floor(s/60)+':'+pad2(Math.max(0,Math.round(s%60)));
 let restEnd=0, restTick=null, restDone=0, actx=null;
 function beep(){
@@ -863,7 +874,7 @@ function drawRest(){
   if(!restEnd&&!restDone){bar.hidden=true;document.body.classList.remove('resting');return;}
   bar.hidden=false; document.body.classList.add('resting');
   const left=(restEnd-Date.now())/1000;
-  if(left<=0&&!restDone){restDone=Date.now();beep();}
+  if(left<=0&&!restDone){restDone=Date.now();if(!S.alarm)beep();}
   if(restDone){
     bar.className='rest over';
     bar.innerHTML='<span class="rl">Descanso</span><b>A la serie</b><button data-rx="stop">Listo</button>';
@@ -872,8 +883,9 @@ function drawRest(){
   }
   bar.className='rest';
   bar.innerHTML='<span class="rl">Descanso</span><b>'+mmss(Math.ceil(left))+'</b>'+
-    '<button data-rx="-15" aria-label="Quitar 15 segundos">−15</button>'+
-    '<button data-rx="15" aria-label="Agregar 15 segundos">+15</button>'+
+    /* con la alarma del iPhone el tiempo ya quedó en el Reloj: ajustarlo aquí lo descuadraría */
+    (S.alarm?'':'<button data-rx="-15" aria-label="Quitar 15 segundos">−15</button>'+
+    '<button data-rx="15" aria-label="Agregar 15 segundos">+15</button>')+
     '<button data-rx="stop">Saltar</button>';
 }
 document.addEventListener('visibilitychange',function(){if(!document.hidden&&(restEnd||restDone))drawRest();});
@@ -1125,6 +1137,22 @@ function renderNotes(){
     '<table><tr><th>Músculo</th><th>Series</th><th>Frec.</th></tr>'+rws+'</table>'+
     '<h2>Créditos</h2>'+
     '<p>Animaciones de los ejercicios: © Gym visual (gymvisual.com), vía exercises-dataset; pendulum squat: © Fitness Programer (fitnessprogramer.com). Ilustraciones de respaldo: wger.de, con licencia CC BY-SA.</p>'+
+    '<h2>Alarma de descanso</h2>'+
+    '<p>El botón <b>Descanso</b> de cada ficha cuenta <b>3:00</b> en los compuestos y <b>2:30</b> en los aislamientos. Una app web no puede sonar con el teléfono bloqueado, así que la alarma la pone el <b>temporizador del Reloj</b> del iPhone, que suena aunque esté en silencio.</p>'+
+    '<div class="seg alarmseg">'+
+      '<button class="'+(S.alarm?'on':'')+'" data-alarm="on">Alarma del iPhone</button>'+
+      '<button class="'+(S.alarm?'':'on')+'" data-alarm="off">Solo en la app</button>'+
+    '</div>'+
+    '<p>Para activarla hay que crear un atajo una sola vez:</p>'+
+    '<ol class="steps">'+
+      '<li>Abre la app <b>Atajos</b> y toca <b>+</b>.</li>'+
+      '<li>Toca <b>Agregar acción</b>, busca <b>Iniciar temporizador</b> y agrégala.</li>'+
+      '<li>Toca la cantidad de tiempo, mantén presionado y elige <b>Entrada del atajo</b>. Cambia la unidad a <b>segundos</b>.</li>'+
+      '<li>Arriba, ponle de nombre exactamente <b>'+ATAJO+'</b> y toca <b>OK</b>.</li>'+
+      '<li>Elige <b>Alarma del iPhone</b> arriba y toca <b>Probar</b>: debería poner un temporizador de 5 segundos.</li>'+
+    '</ol>'+
+    '<button class="bkbtn" data-alarm="test">Probar alarma (5 s)</button>'+
+    '<p>Al tocar Descanso, el iPhone pasa un segundo por Atajos para iniciar el temporizador. Vuelve a VANDAL deslizando la barra de abajo hacia la derecha. La cuenta también se ve en la app.</p>'+
     '<h2>Respaldo</h2>'+
     '<p>Tu historial vive solo dentro de este ícono del teléfono. Para pasarlo a otro ícono o a otro teléfono: <b>copia el respaldo aquí</b>, abre la app nueva, vuelve a esta sección y <b>pégalo en Restaurar</b>.</p>'+
     '<div class="bk">'+
@@ -1177,14 +1205,6 @@ if(document.fonts&&document.fonts.ready) document.fonts.ready.then(function(){pl
 window.addEventListener('resize',function(){placePin(true);});
 document.addEventListener('load',function(e){if(e.target&&e.target.tagName==='IMG')placePin(true);},true);
 
-/* descanso automático: al terminar de escribir las reps de una serie que ya tiene peso
-   (el evento change llega al cerrar el teclado o pasar al siguiente campo) */
-document.addEventListener('change',function(e){
-  const el=e.target.closest('[data-log]');
-  if(!el||el.dataset.f!=='r'||el.dataset.di!==undefined||el.value.trim()==='') return;
-  const L=(S.log[day]||{})[el.dataset.log], r=L&&L[+el.dataset.set];
-  if(r&&r.w!==''&&r.r!=='') startRest(restOf(el.dataset.log));
-});
 
 /* escribir no redibuja la vista: solo refresca el indicador de esa fila */
 document.addEventListener('input',function(e){
@@ -1226,7 +1246,11 @@ document.addEventListener('click',function(e){
     if(a==='stop') stopRest(); else {restEnd=Math.max(Date.now()+5000,restEnd+(+a)*1000);drawRest();}
     return;}
   const rb=e.target.closest('[data-rest]');
-  if(rb){startRest(restOf(rb.dataset.rest));return;}
+  if(rb){descansar(restOf(rb.dataset.rest));return;}
+  const al=e.target.closest('[data-alarm]');
+  if(al){const a=al.dataset.alarm;
+    if(a==='test'){alarmaIphone(5);return;}
+    S.alarm=(a==='on');save();return render();}
   const pb=e.target.closest('[data-prog]');
   if(pb){prog=(prog===pb.dataset.prog?null:pb.dataset.prog);return render();}
 
